@@ -1,0 +1,11 @@
+Estructura de la lista de funcionalidades
+(historia de usuario o casos de uso)
+-----------------------------------------
+COMO <rol> QUIERO <objetivo> PARA <verifica>
+
+Unos ejemplos:
+http://www.pmoinformatica.com/2012/10/plantillas-scrum-historias-de-usuario.html
+
+-----------------------------------------
+Para mas informacion:
+ proyectosagiles.org
