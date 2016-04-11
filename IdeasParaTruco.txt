@@ -2,4 +2,6 @@ Este archivo está destinado para las ideas del proyecto.
 
 - La primera, aprender a jugar al truco (Miguel).
 - Juntarse a jugar al truco que de ahí saldrán muchas ideas para incorporar al juego.
+- 
+- Todo esto después de pasar el martes que ustedes rinden base de datos jajaja.
 - ...
