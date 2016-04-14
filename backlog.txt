@@ -1,0 +1,9 @@
+
+
+COMO <rol> QUIERO <objetivo> PARA <veririca>
+
+
+Ejemplo:
+
+como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progrma
+como desarrollador quiero fasilitar a un solo jugador
