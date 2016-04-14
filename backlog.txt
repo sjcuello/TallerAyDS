@@ -34,6 +34,7 @@ como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progr
 como desarrollador quiero fasilitar a un solo jugador
 
 
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------------
 como cliente quiero poder jugar con flor
 como cliente quiero poder cantar evido para la primera ronda
@@ -44,3 +45,18 @@ como cliente quiero poder cantar truco para la primera ronda
 como cliente quiero poder cantar re truco envido para la segunda ronda
 como cliente quiero poder cantar vale 4 para la tercera ronda ronda
 >>>>>>> 0ae8e8a4375f6aa6754d384d0159da3b41f48012
+=======
+------------------------------------------------------------------
+como cliente quiero poder cantar envido 
+como cliente quiero poder hacer tener la posibilidad de catar truco a las pardas para potencialmente (en base al valor de mis cartas) ganar la partida actual
+como cliente quiero que se cumplan las leyes generales de jugabilidad para no tener que lidiar con la aplicacion
+como cliente quiero que 
+
+
+como desarrollador quiero solo habilitar el poder cantar envido en la primera ronda
+como desarrollador quiero poder limitar en tiempo las jugadas de los usuarios para hacer mas agil el juego
+como desarrollador quiero hacer estadisticas del jugador (en base a la cantidad de partidas jugadas y resultados) para ofrecerle al usuario un grafico de ello
+como desarrollador quiero
+como desarrollador quiero
+como desarrollador quiero
+>>>>>>> Stashed changes
