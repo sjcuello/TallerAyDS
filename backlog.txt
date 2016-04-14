@@ -1,62 +1,57 @@
-
-
-COMO <rol> QUIERO <objetivo> PARA <veririca>
-
+Program Backlog 
 
 Ejemplo:
+COMO <rol> QUIERO <objetivo> PARA <veririca>
 
-<<<<<<< HEAD
-Como cliente quiero interfaz intuitiva para facilitar la interaccion con el programa.
+Backlog Truco: 
 
-Como desarrollador quiero facilitar a un solo jugador
+MIGUEL:
+- Como jugador quiero reiniciar una partida que estoy jugando.
 
-Como cliente quiero tener varias partidas creadas en simultaneo jugando una al termino de otra.
+- Como jugador quiero cancelar/abandonar una partida en cualquier momento.
 
-Como cliente quiero tener niveles de dificultad distintas.
+- Como jugador quiero acumular mi puntaje total y el de cada juego siempre.
 
-Como jugador quiero reiniciar una partida que voy perdiendo.
+- Como jugador quiero disponer de un contador de puntos del juego.
 
-Como desarrollador quiero controlar que no se cante envido después de la primera.
+- Como jugador quiero ver un ranking de los todos los jugadores.
 
-Como desarrollador quiero controlar que si se canta envido después de la primera la maquina.
+- Como desarrollador quiero dar de alta a solo un jugador a traves de su correo.
 
-Como jugador quiero cancelar una partida en cualquier momento.
+- Como desarrollador quiero controlar que no se cante envido después de la primera.
 
-Como jugador quiero acumular mi puntaje total y el de cada juego siempre.
+- Como desarrollador quiero controlar que si se canta envido después de la primera la maquina determine como seguir.
 
-Como jugador quiero disponer de un contador de puntos.
+- ...
 
-Como jugador quiero determinar mi contricante en una lista de posibles rivales.
+PABLO:
+- Como jugador quiero poder jugar con flor.
 
-Como jugador quiero ver un ranking de los todos lo jugadores.
-=======
-como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progrma
-como desarrollador quiero fasilitar a un solo jugador
+- Como jugador quiero poder cantar evido para la primera ronda.
 
+- Como jugador quiero poder cantar real envido para la primera ronda.
 
-<<<<<<< Updated upstream
-------------------------------------------------------------------------------
-como cliente quiero poder jugar con flor
-como cliente quiero poder cantar evido para la primera ronda
-como cliente quiero poder cantar real envido para la primera ronda
-como cliente quiero poder cantar falta envido para la primera ronda
+- Como jugador quiero poder cantar falta envido para la primera ronda.
 
-como cliente quiero poder cantar truco para la primera ronda
-como cliente quiero poder cantar re truco envido para la segunda ronda
-como cliente quiero poder cantar vale 4 para la tercera ronda ronda
->>>>>>> 0ae8e8a4375f6aa6754d384d0159da3b41f48012
-=======
-------------------------------------------------------------------
-como cliente quiero poder cantar envido 
-como cliente quiero poder hacer tener la posibilidad de catar truco a las pardas para potencialmente (en base al valor de mis cartas) ganar la partida actual
-como cliente quiero que se cumplan las leyes generales de jugabilidad para no tener que lidiar con la aplicacion
-como cliente quiero que 
+- Como jugador quiero poder cantar truco para la primera ronda.
 
+- Como jugador quiero poder cantar re truco envido para la segunda ronda.
 
-como desarrollador quiero solo habilitar el poder cantar envido en la primera ronda
-como desarrollador quiero poder limitar en tiempo las jugadas de los usuarios para hacer mas agil el juego
-como desarrollador quiero hacer estadisticas del jugador (en base a la cantidad de partidas jugadas y resultados) para ofrecerle al usuario un grafico de ello
-como desarrollador quiero
-como desarrollador quiero
-como desarrollador quiero
->>>>>>> Stashed changes
+- Como jugador quiero poder cantar vale 4 para la tercera ronda ronda.
+
+- ...
+
+SANTI:
+- Como jugador quiero poder cantar envido. 
+
+- Como jugador quiero poder tener la posibilidad de cantar truco a las pardas para potencialmente (en base al valor de mis cartas) ganar la partida actual.
+
+- Como jugador quiero que se cumplan las leyes generales de jugabilidad para no tener que lidiar con la aplicacion.
+
+- Como desarrollador quiero solo habilitar el poder cantar envido en la primera ronda.
+
+- Como desarrollador quiero poder limitar en tiempo las jugadas de los usuarios para hacer mas agil el juego.
+
+- Como desarrollador quiero hacer estadisticas del jugador (en base a la cantidad de partidas jugadas y resultados) para ofrecerle al usuario un grafico de ello.
+
+- ...
