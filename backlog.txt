@@ -5,6 +5,7 @@ COMO <rol> QUIERO <objetivo> PARA <veririca>
 
 Ejemplo:
 
+<<<<<<< HEAD
 Como cliente quiero interfaz intuitiva para facilitar la interaccion con el programa.
 
 Como desarrollador quiero facilitar a un solo jugador
@@ -28,3 +29,18 @@ Como jugador quiero disponer de un contador de puntos.
 Como jugador quiero determinar mi contricante en una lista de posibles rivales.
 
 Como jugador quiero ver un ranking de los todos lo jugadores.
+=======
+como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progrma
+como desarrollador quiero fasilitar a un solo jugador
+
+
+------------------------------------------------------------------------------
+como cliente quiero poder jugar con flor
+como cliente quiero poder cantar evido para la primera ronda
+como cliente quiero poder cantar real envido para la primera ronda
+como cliente quiero poder cantar falta envido para la primera ronda
+
+como cliente quiero poder cantar truco para la primera ronda
+como cliente quiero poder cantar re truco envido para la segunda ronda
+como cliente quiero poder cantar vale 4 para la tercera ronda ronda
+>>>>>>> 0ae8e8a4375f6aa6754d384d0159da3b41f48012
