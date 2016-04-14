@@ -7,3 +7,14 @@ Ejemplo:
 
 como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progrma
 como desarrollador quiero fasilitar a un solo jugador
+
+
+------------------------------------------------------------------------------
+como cliente quiero poder jugar con flor
+como cliente quiero poder cantar evido para la primera ronda
+como cliente quiero poder cantar real envido para la primera ronda
+como cliente quiero poder cantar falta envido para la primera ronda
+
+como cliente quiero poder cantar truco para la primera ronda
+como cliente quiero poder cantar re truco envido para la segunda ronda
+como cliente quiero poder cantar vale 4 para la tercera ronda ronda
