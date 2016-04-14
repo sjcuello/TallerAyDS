@@ -4,13 +4,15 @@ Este archivo está destinado para las ideas del proyecto.
 - Juntarse a jugar al truco que de ahí saldrán muchas ideas para incorporar al juego.
 - 
 - Todo esto después de pasar el martes que ustedes rinden base de datos jajaja.
-- /////////Aca propongo un par de cosas SJC////////
+- 
+/////////Aca propongo un par de cosas SJC////////
+
 - Tendriamos antes que nada organizarnos para ver en que horarios/dias podemos organizar para juntarnos, esto nos va a  llevar tiempo
-  mas que nada porque seguramente lo tengamos que hacer en JAVASCRIPT algo que va a ser nuevo para todos creo.
-  Como lo que vamos a hacer es una parte en html (corrijanme si no es asi) pablito vos has estado mas en el tema y capaz que nos podes dar una mano.
+  mas que nada porque seguramente lo tengamos que hacer en JAVASCRIPT (Y todas las herramientas que utilizaremos y que nos irán enseñando en cada taller, como node.js / mocha / etc) algo que va a ser nuevo para todos creo.
+  Como lo que vamos a hacer es una parte en html (corrijanme si no es asi (Es así pero tengo entendido que la parte de desarrollo web es al último de todo, incluso tengo la duda que sea para el proximo cuatrimestre que continuamos.)) pablito vos has estado mas en el tema y capaz que nos podes dar una mano.
   En cuanto a la parte "grafica" del proyecto, dudo que tengamos que darle mucho enfasis ya que no nos van a evaluar eso, de todos modos estaria bueno hacerlo.
   Tambien (ya que la mayoria de los dias coincidimos en los horarios) que a la salida (6pm) nos juntemos aunque sea todos los dias (o la mayoria) a fin
-  de poder ir haciendo el trabajo de a poco, a esa hora la biblio esta vacia y le podemos dar hasta las 8. Con 2 horitas diarias creo que podemos llevarla bastante
+  de poder ir haciendo el trabajo de a poco, a esa hora la biblio esta vacia y le podemos dar hasta las 8. Con 2 horitas diarias creo que podemos llevarla bastante (Esta idea es clave porque es necesario todos los días avanzar un poco para no quedarnos con todo al final, te complemento la idea que hay días que terminamos muy rotos al final del día, quizas juntarnos en la mañana de 8 a 10 obviamente cuando podamos también podría ser.)
   bien y no solo la materia esta sino que tambien le podriamos dar a Algoritmos2 que me preocupa bastante jaja.
   Ahora las ideas:
     + Lo que les comente la otra vez de la unica imagen para poder ahorrar espacio y simplificarnos las cosas
@@ -24,5 +26,5 @@ Este archivo está destinado para las ideas del proyecto.
         http://efectosparabloggerywebs.blogspot.com.ar/2014/07/juego-de-solitario-desarrollado-en.html
           El video de ello:
           https://www.youtube.com/watch?v=WM2406hyUns
-    +
+    + Empezar a completar el backlog (Creo que se llama así que es la lista de cosas que empezaremos a necesitar para resolver el juego del truco.)
 -////////////////////////////////////////////////////////////
