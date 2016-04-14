@@ -5,5 +5,26 @@ COMO <rol> QUIERO <objetivo> PARA <veririca>
 
 Ejemplo:
 
-como cliente quiero interfaz intuitiva para fasilitar la interaccion con l progrma
-como desarrollador quiero fasilitar a un solo jugador
+Como cliente quiero interfaz intuitiva para facilitar la interaccion con el programa.
+
+Como desarrollador quiero facilitar a un solo jugador
+
+Como cliente quiero tener varias partidas creadas en simultaneo jugando una al termino de otra.
+
+Como cliente quiero tener niveles de dificultad distintas.
+
+Como jugador quiero reiniciar una partida que voy perdiendo.
+
+Como desarrollador quiero controlar que no se cante envido después de la primera.
+
+Como desarrollador quiero controlar que si se canta envido después de la primera la maquina.
+
+Como jugador quiero cancelar una partida en cualquier momento.
+
+Como jugador quiero acumular mi puntaje total y el de cada juego siempre.
+
+Como jugador quiero disponer de un contador de puntos.
+
+Como jugador quiero determinar mi contricante en una lista de posibles rivales.
+
+Como jugador quiero ver un ranking de los todos lo jugadores.

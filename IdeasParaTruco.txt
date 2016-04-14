@@ -24,7 +24,7 @@ Este archivo está destinado para las ideas del proyecto.
         https://es.khanacademy.org/computing/computer-programming/programming-games-visualizations
         Aca un juego de solitario:
         http://efectosparabloggerywebs.blogspot.com.ar/2014/07/juego-de-solitario-desarrollado-en.html
-          El video de ello:
-          https://www.youtube.com/watch?v=WM2406hyUns
+        El video de ello:
+        https://www.youtube.com/watch?v=WM2406hyUns
     + Empezar a completar el backlog (Creo que se llama así que es la lista de cosas que empezaremos a necesitar para resolver el juego del truco.)
 -////////////////////////////////////////////////////////////
