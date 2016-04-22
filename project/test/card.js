@@ -8,8 +8,8 @@ describe ("Card",function(){
   })
   describe("#Show", function(){
     if ("Should show the card",function(){
-      var c=new(4, "copa");
-      expect(c.show()).to.be.equal("4:copa");
+      var c=new Card(4, "copa");
+      expect(c.show()).to.be.equal("4: copa");
       })
     })
     
