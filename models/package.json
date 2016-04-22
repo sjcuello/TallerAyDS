@@ -1,0 +1,21 @@
+{
+  "name": "Taller",
+  "version": "1.0.0",
+  "description": "Clase de nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sjcuello/borrar.git"
+  },
+  "author": "Miguel Jimeno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjcuello/borrar/issues"
+  },
+  "dependencies": {
+    "chai": "~3.5.0"
+  }
+}
