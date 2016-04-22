@@ -12,6 +12,8 @@ PROPUESTAS DE CLASE
 
 + Como jugador en el comienzo de una ronda quiero tener 3 cartas al azar del mazo.
 
++ Como jugador que tiene el turno quiero poder jugar una carta.
+
 
 -------------------------------------------------------------------------------------------------------------------------
 PROPUESTAS GRUPALES
@@ -58,3 +60,4 @@ PROPUESTAS GRUPALES
 
 - Como desarrollador quiero chequear las cartas según su valor.
 
+- Como desarrollador quiero que exista un en e juego un tablero con un mazo de cartas, por cada ronda.
