@@ -31,9 +31,9 @@ PABLO:
 
 - Como jugador quiero poder cantar falta envido para la primera ronda.
 
-- Como jugador quiero poder cantar truco para la primera ronda.
+- Como jugador quiero poder cantar truco/ re truco/ vale 4.
 
-- Como jugador quiero poder cantar re truco envido para la segunda ronda.
+- Como jugador quiero poder repartir las cartas al inicio de la ronda.
 
 - ...
 
