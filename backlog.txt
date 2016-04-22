@@ -14,16 +14,13 @@ MIGUEL:
 
 - Como jugador quiero disponer de un contador de puntos del juego.
 
-- Como jugador quiero ver un ranking de los todos los jugadores.
+- Como jugador quiero ver un ranking de todos los jugadores.
 
 - Como desarrollador quiero dar de alta a solo un jugador a traves de su correo.
 
 - Como desarrollador quiero controlar que no se cante envido después de la primera.
 
-- Como desarrollador quiero controlar que si se canta envido después de la primera la maquina determine como seguir. 
-/////////////la opcion de cantar envido seria exclusiva para esa mano (despues "desapareceria el boton")-SJC
-
-- ...
+- 
 
 PABLO:
 - Como jugador quiero poder jugar con flor.
@@ -38,8 +35,6 @@ PABLO:
 
 - Como jugador quiero poder cantar re truco envido para la segunda ronda.
 
-- Como jugador quiero poder cantar vale 4 para la tercera ronda ronda.
-/////////////////////(la habilitacion de la opcion de cantar truco debe aparecer en todas las manos, no se si esto esta bien especificado o no en el backlog-SJC)
 - ...
 
 SANTI:
@@ -70,3 +65,4 @@ SANTI:
 - Como desarrollador quiero hacer estadisticas del jugador (en base a la cantidad de partidas jugadas y resultados) para ofrecerle al usuario un grafico de ello.
 
 - ...
+
