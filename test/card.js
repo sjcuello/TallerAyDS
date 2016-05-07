@@ -11,8 +11,8 @@ describe("Card", function(){
 
 	describe ("#Show", function(){
 		it ("Should show the card", function(){
-			var c = new Card (4,"copa");
-			expect(c.show()).to.be.equal("4:Copa");
+			var c = new Card ("Copa",4);
+			expect(c.show()).to.equal("4:Copa");
 		});
 	});
 });
