@@ -10,6 +10,8 @@ var _ = require('lodash');
 var StateMachine = require("../node_modules/javascript-state-machine/state-machine.js");
 var deckModel = require("./deck");
 var Deck  = deckModel.deck;
+var cardTable = []; //cartas jugadas
+
 
 function newTrucoFSM(){
   var fsm = StateMachine.create({
@@ -34,6 +36,7 @@ function Round(game, turn){
    */
   this.game = game;
 
+  this.cardTable = cardTable;
   /*
    * next turn
    */
@@ -115,9 +118,14 @@ Round.prototype.calculateScoreTruco = function(action){
     ch = 1;
   }
 
+
+
+
   if(action == "no-quiero"){
-      // Obtengo el jugador opuesto a la mano corriente. 
-      ch = (ch*(-1))+1
+  //if(this.cardTable.isLength(0)){
+  	  if((this.cardTable[0]== null)   &&  (this.cardTable[1]== null)){
+      	ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
+      }
       this.score[ch] += 1 ;
   }
   return this.score;
@@ -134,9 +142,17 @@ Round.prototype.calculateScoreEnvido = function(action){
   }else{
     ch = 1;
   }
-  
-  if(action == "quiero"){
 
+   if(action == "play card"){
+   //realizar una funcion para que jugador elija una carta
+   	if(this.game.player1 == this.game.currentHand){
+  		this.cardTable[0] = this.game.player1.cards[0];
+  	}else{
+  		this.cardTable[1] = this.game.player2.cards[0];
+  	}
+  }
+  
+  if((action == "quiero") && (this.cardTable[0]==null)||(this.cardTable[1]==null)){
     if(pj1 > pj2){ this.score[0] += 2; }
 
     if(pj1 < pj2){ this.score[1] += 2; }
@@ -145,12 +161,14 @@ Round.prototype.calculateScoreEnvido = function(action){
   }
 
   if(action == "no-quiero"){
-      // Obtengo el jugador opuesto a la mano corriente. 
-      ch = (ch*(-1))+1
+ //if(this.cardTable.isLength(0)){
+  	  if((this.cardTable[0]== null)   &&  (this.cardTable[1]== null)){
+      	ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
+      }
       this.score[ch] += 1 ;
   }
   return this.score;
-}
+};
 
 /*
  * Let's Play :)
