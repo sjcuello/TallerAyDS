@@ -9,9 +9,12 @@
 var _ = require('lodash');
 var StateMachine = require("../node_modules/javascript-state-machine/state-machine.js");
 var deckModel = require("./deck");
+var cardModel = require("./card");
+var Card = cardModel.card;
 var Deck  = deckModel.deck;
 var cardTable = []; //cartas jugadas
-
+var turnWin = [-1,-1,-1]; //ganador por turno
+var tmpWin = 0; ////hace referencia a la posicion(turno) que falta cargar 
 
 function newTrucoFSM(){
   var fsm = StateMachine.create({
@@ -42,6 +45,8 @@ function Round(game, turn){
    */
   this.currentTurn = turn;
 
+  this.turnWin = turnWin;
+
   /*
    * here is a FSM to perform user's actions
    */
@@ -50,6 +55,8 @@ function Round(game, turn){
   /*
    *
    */
+	this.tmpWin = tmpWin;
+
   this.status = 'running';
 
   /*
@@ -96,9 +103,9 @@ function switchPlayer(player) {
  */
 Round.prototype.calculateScore = function(action){
   if(action == "quiero" || action == "no-quiero" || action == "play card"){
-    //this.score = [0, 2];
-    this.calculateScoreEnvido(action);
-    //this.calculateScoreTruco(action);
+    //siempre ejecuta las 2
+    //this.calculateScoreEnvido(action);
+    this.calculateScoreTruco(action);
     this.game.score[0] += this.score[0];
     this.game.score[1] += this.score[1];
   }
@@ -108,8 +115,70 @@ Round.prototype.calculateScore = function(action){
 
 
 Round.prototype.calculateScoreTruco = function(action){
-  var cj1 = this.game.player1.cards() ;
-  var cj2 = this.game.player2.cards() ;
+
+ if(action == "truco"){
+   //realizar una funcion para que jugador elija una carta
+   	if(this.game.player1 == this.game.currentHand){
+   		var i = 0;
+   		var c1 = 0;
+   		while(this.cardTable[i] != null){
+   			c1++;
+   			i+=2;
+   		}
+  		this.cardTable[i] = this.game.player1.cards[c1];
+  	}else{
+  		var j = 1;
+  		var c2 = 0;
+   		while(this.cardTable[i] != null){
+   			c2++;
+   			i+=2;
+   		}
+  		this.cardTable[j] = this.game.player2.cards[c2];
+  	}
+  }
+  
+  if((action == "quiero")){
+
+  	var x1;
+  	var x2;
+
+  	switch(tmpWin){
+  		case 0 : x1=0; x2=1; break;
+  		case 1 : x1=2; x2=3; break;
+  		case 2 : x1=4; x2=5; break;
+  	} 
+
+    var c = new Card(1, 'espada');
+    var x = new Card(4, 'basto');
+  	//var card1 = this.cardTable[x1];
+  	//var card2 = this.cardTable[x2];
+  	var conf = c.confront(x);
+
+  	//var conf = cardTable[x1].confront(this.cardTable[x2]);
+  	switch(conf){
+  		case -1 :turnWin[tmpWin]=1; tmpWin++; break;
+  		case 0 : tmpWin++; break;
+  		case 1 : turnWin[tmpWin]=0; tmpWin++; break;
+  	}
+
+  	if(tmpWin==3){
+  		var w=0; 
+  		var count0=0;//cantidad de turnos ganados de jugador 1
+  		var count1=0;//cantidad de turnos ganados de jugador 2
+  	  while(w<tmpWin){
+	  	if(turnWin[w]==0){count0++;}
+	  	if(turnWin[w]==1){count1++;}
+	  	w++;
+  	  }
+  	  if(count0>count1){
+  	  	this.score[0]+=2;
+  	  }else{
+  	  	this.score[1]+=2;
+  	  }
+  	}
+
+  }
+
   var ch = undefined; 
   // La var ch tiene la mano corriente.
   if(this.game.player1 == this.game.currentHand){ 
@@ -118,15 +187,9 @@ Round.prototype.calculateScoreTruco = function(action){
     ch = 1;
   }
 
-
-
-
   if(action == "no-quiero"){
-  //if(this.cardTable.isLength(0)){
-  	  if((this.cardTable[0]== null)   &&  (this.cardTable[1]== null)){
-      	ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
-      }
-      this.score[ch] += 1 ;
+	ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
+    this.score[ch] += 1 ;
   }
   return this.score;
 }

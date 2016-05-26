@@ -35,13 +35,14 @@ describe('Game#play', function(){
         new Card(2, 'basto')
     ]);
   });
-
+/*
   it('plays [envido, quiero] should gives 2 points to winner', function(){
     game.play('player1', 'envido');
     game.play('player2', 'quiero');
 
     expect(game.score).to.deep.equal([0, 2]);
   });
+*/  
 });
 
 
@@ -65,7 +66,7 @@ describe('Game 2 #play', function(){
         new Card(4, 'espada')
     ]);
   });
-
+/*
   it('plays [envido, quiero] should gives 2 points to winner', function(){
     game.play('player1', 'envido');
     game.play('player2', 'quiero');
@@ -77,6 +78,13 @@ describe('Game 2 #play', function(){
     game.play('player2', 'envido');
     game.play('player1', 'no-quiero');    
     expect(game.score).to.deep.equal([0,1]);
+  });
+*/
+  it('plays [truco, quiero] should gives 2 points to winner', function(){
+    game.play('player1', 'play card');
+    game.play('player2', 'truco');
+    game.play('player1', 'no-quiero');    
+    expect(game.score).to.deep.equal([0,2]);
   });
 
 
