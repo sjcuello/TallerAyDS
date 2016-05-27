@@ -79,13 +79,24 @@ describe('Game 2 #play', function(){
     game.play('player1', 'no-quiero');    
     expect(game.score).to.deep.equal([0,1]);
   });
+
 */
-  it('plays [truco, quiero] should gives 2 points to winner', function(){
-    game.play('player1', 'play card');
-    game.play('player2', 'truco');
-    game.play('player1', 'no-quiero');    
-    expect(game.score).to.deep.equal([0,2]);
+    it('plays [truco, no-quiero] ', function(){
+        
+    game.play('player1', 'truco');
+    game.play('player2', 'no-quiero'); 
+     
+    expect(game.score).to.deep.equal([1,0]);
+  }); 
+
+/*
+  it('plays [play card, truco, quiero] ', function(){
+    game.play('player1', 'playered card');
+    game.play('player2', 'truco');    
+    game.play('player1', 'quiero');
+    expect(game.score).to.deep.equal([0,0]);
   });
 
+*/
 
 });

@@ -116,12 +116,12 @@ Round.prototype.calculateScore = function(action){
 
 Round.prototype.calculateScoreTruco = function(action){
 
- if(action == "truco"){
+ if((action == "play card")&&(tmpWin<3)){
    //realizar una funcion para que jugador elija una carta
    	if(this.game.player1 == this.game.currentHand){
    		var i = 0;
    		var c1 = 0;
-   		while(this.cardTable[i] != null){
+   		while((i<6)&&(this.cardTable[i] != null)){
    			c1++;
    			i+=2;
    		}
@@ -129,68 +129,76 @@ Round.prototype.calculateScoreTruco = function(action){
   	}else{
   		var j = 1;
   		var c2 = 0;
-   		while(this.cardTable[i] != null){
+   		while((j<6)&&(this.cardTable[i] != null)){
    			c2++;
-   			i+=2;
+   			j+=2;
    		}
   		this.cardTable[j] = this.game.player2.cards[c2];
   	}
   }
   
-  if((action == "quiero")){
-
-  	var x1;
-  	var x2;
+  if((action == "quiero")&&(tmpWin<3)){
+//---------cargo (manualmente) correspondiente a la mano q falta jugar
+  	var x1 = undefined;
+  	var x2 = undefined; 
+    var count0=0;//cantidad de turnos ganados de jugador 1
+    var count1=0;//cantidad de turnos ganados de jugador 2
 
   	switch(tmpWin){
-  		case 0 : x1=0; x2=1; break;
-  		case 1 : x1=2; x2=3; break;
-  		case 2 : x1=4; x2=5; break;
+  		case 0 : 
+			 x1=0; x2=1; //primera mano. cargo carta[0] de ambos jugadores
+			  if (this.cardTable[0]==null){  this.cardTable[0] = this.game.player1.cards[0];} 
+  			if (this.cardTable[1]==null){  this.cardTable[1] = this.game.player2.cards[0];} 
+			break;
+  		case 1 :
+  			x1=2; x2=3;//segunda mano. cargo carta[1] de ambos jugadores
+  		  if (this.cardTable[2]==null){  this.cardTable[2] = this.game.player1.cards[1];} 
+  			if (this.cardTable[3]==null){  this.cardTable[3] = this.game.player2.cards[1];} 
+  			break;
+  		case 2 : 
+  			x1=4; x2=5;//tercera mano. cargo carta[2] de ambos jugadores
+  			if (this.cardTable[4]==null){  this.cardTable[4] = this.game.player1.cards[2];} 
+  			if (this.cardTable[5]==null){  this.cardTable[5] = this.game.player2.cards[2];} 
+  			break;
   	} 
-
-    var c = new Card(1, 'espada');
-    var x = new Card(4, 'basto');
-  	//var card1 = this.cardTable[x1];
-  	//var card2 = this.cardTable[x2];
-  	var conf = c.confront(x);
-
-  	//var conf = cardTable[x1].confront(this.cardTable[x2]);
+//----------------confronto las cartas de los jugadores correspondientes a la mano corriente ---------------------
+  	var card1 = this.cardTable[x1];
+  	var card2 = this.cardTable[x2];
+  	var conf = card1.confront(card2);
+//-----------------------cargo el ganador de la ronda-----------------------------------------------
   	switch(conf){
-  		case -1 :turnWin[tmpWin]=1; tmpWin++; break;
-  		case 0 : tmpWin++; break;
-  		case 1 : turnWin[tmpWin]=0; tmpWin++; break;
-  	}
+  		case -1 : turnWin[tmpWin]=1; tmpWin++; break;//gana jugador2 la mano
+      case 1 : turnWin[tmpWin]=0; tmpWin++; break;//gana jugador1 la mano
+  		case 0 : //si empatan no cargo jugador, truco alas pardas
 
-  	if(tmpWin==3){
-  		var w=0; 
-  		var count0=0;//cantidad de turnos ganados de jugador 1
-  		var count1=0;//cantidad de turnos ganados de jugador 2
-  	  while(w<tmpWin){
-	  	if(turnWin[w]==0){count0++;}
-	  	if(turnWin[w]==1){count1++;}
-	  	w++;
-  	  }
-  	  if(count0>count1){
-  	  	this.score[0]+=2;
-  	  }else{
-  	  	this.score[1]+=2;
-  	  }
-  	}
+          if(tmpWin == 2){ //si empatan en la tercera mano, le sumo 2 al q gano la primera mano
+            e = turnWin[0];
+            this.score[e]+=2;
+          }
 
+          if(tmpWin<2){tmpWin++}//empatan en la primera mano, paso ala segunda mano
+          if(tmpWin<2){ //si empatan en la segunda mano 
+              if(turnWin[0] == -1){tmpWin++} 
+
+          }
+
+          break; 
+  	}
   }
 
-  var ch = undefined; 
-  // La var ch tiene la mano corriente.
-  if(this.game.player1 == this.game.currentHand){ 
-    ch = 0;
-  }else{
-    ch = 1;
-  }
-
-  if(action == "no-quiero"){
-	ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
+  if((action == "no-quiero")&&(tmpWin<3)){
+	  var ch = undefined; // tiene la mano corriente.
+	  if(this.game.player1 == this.game.currentHand){ 
+	    ch = 0;
+	  }else{
+	    ch = 1;
+	  }
+	  ch = (ch*(-1))+1// Obtengo el jugador opuesto a la mano corriente. 
     this.score[ch] += 1 ;
+    tmpWin=3;
   }
+ 
+
   return this.score;
 }
 
