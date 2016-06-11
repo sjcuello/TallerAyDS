@@ -83,7 +83,7 @@ describe('Game 2 #play', function(){
 */
     it('plays [truco, no-quiero] ', function(){
         
-    game.play('player1', 'truco');
+    game.play('player1', 'playcard', 5, 'copa');
     game.play('player2', 'no-quiero'); 
      
     expect(game.score).to.deep.equal([1,0]);
