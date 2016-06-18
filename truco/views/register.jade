@@ -1,0 +1,20 @@
+extends layout
+block content
+	.login-card.effect7
+		h1 Crear cuenta
+		form(role='form', action="/register",method="post", style='max-width: 300px;')
+			.form-group
+				label(for="username") Usuario
+				input.form-control(type='text', name="username", placeholder='Usuario')
+			.form-group
+				label(for="password") Contraseña
+				input.form-control(type='password', name="password", placeholder='Contraseña')
+			.form-group
+			//	label(for="password") Confirmar contraseña
+			//	input.form-control(type='password', name="confirm_password", placeholder='Confirmar contraseña')					
+			button.btn.btn-primary(type='submit' class="right-space left-space") Crear cuenta
+			&nbsp;
+			a(href='/')
+				button.btn.btn-default(type="button") Atrás
+	.login-help
+		a(href='/login') Ya tengo cuenta

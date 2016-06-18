@@ -17,7 +17,7 @@ var cardNumbers = [1, 2, 3, 4, 5, 6, 7, 11, 12];
 /*
  * Constructor
  */
-function Deck(){
+function Deck(){ 
 }
 
 /*
@@ -35,8 +35,8 @@ Deck.prototype.sorted = function(){
  * Mix a sorted deck
  */
 Deck.prototype.mix = function(){
+  //console.log(this.sorted());
   return _.shuffle(this.sorted());
 };
 
 module.exports.deck = Deck;
-

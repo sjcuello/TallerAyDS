@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 /*
 * Matrix used to calculate the card weight in the Truco game
-*   weigth - card
+*   weigth -  card
 *      13  -  1 espada
 *      12  -  1 basto
 *      11  -  7 espada
@@ -20,10 +20,11 @@ var _ = require('lodash');
 *       1  -  4
 */
 var weight = {
-  'oro':    [ 7, 8, 9, 1, 2, 3, 10, 0, 0, 0, 5, 6],
-  'copa':   [ 7, 8, 9, 1, 2, 3,  4, 0, 0, 0, 5, 6],
-  'espada': [13, 8, 9, 1, 2, 3, 11, 0, 0, 0, 5, 6],
-  'basto':  [12, 8, 9, 1, 2, 3,  4, 0, 0, 0, 5, 6]
+  //        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12]
+  'oro':    [0, 7, 8, 9, 1, 2, 3,10, 0, 0, 0, 5, 6],
+  'copa':   [0, 7, 8, 9, 1, 2, 3, 4, 0, 0, 0, 5, 6],
+  'espada': [0, 13,8, 9, 1, 2, 3,11, 0, 0, 0, 5, 6],
+  'basto':  [0, 12,8, 9, 1, 2, 3, 4, 0, 0, 0, 5, 6]
 };
 
 /*
