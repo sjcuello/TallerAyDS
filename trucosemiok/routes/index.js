@@ -97,10 +97,10 @@ router.get('/play', function(req, res){
 router.post('/play', function(req, res){
     g.play(g.currentRound.currentTurn, req.body.action, req.body.value);
     if(g.score[0] >= 30){
-        res.send("Ganaste mono culiao 1:");
+        res.send("Ganaste 1:");
     }
     else if(g.score[1] >= 30){
-       res.send("Ganaste mono culiao 2:"); 
+       res.send("Ganaste 2:"); 
     }else{
         if(g.currentRound.auxWin == true){
             g.newRound();
