@@ -1,0 +1,68 @@
+extends layout
+block content
+    body.bkimg
+    div(class="remove-float center-block text-center")    
+        .play-card.effect7
+            form(role='form', action='/play', method='POST')
+                &nbsp;
+                h4.span#sbfont #{g.player1.name}: #{g.score[0]} - #{g.player2.name}: #{g.score[1]}   
+                hr(style="margin-top: 5px; margin-bottom: 5px")
+                if (g.currentRound.bandera == true)
+                    h4.span#sbfont ¿Truco cantado?: Si
+                p Cartas #{g.player1.name}
+                each card1 in g.currentRound.tablep1
+                    td
+                    &nbsp;    
+                    img(width="67", height="85", src='/images/#{card1.show()}.png')
+                p Cartas #{g.player2.name}
+                each card1 in g.currentRound.tablep2
+                    td
+                    &nbsp;    
+                    img(width="67", height="85", src='/images/#{card1.show()}.png')   
+                p   
+                .form-group.col-sm-6                   
+                    label.col-sm-2.control-label(for='Accion')
+                        | Acción
+                    select#Accion.form-control(name='action')
+                        option(value='playcard') Jugar carta                       
+                        option(value='truco') Truco
+                        option(value='envido') Envido
+                        option(value='quiero') Quiero
+                        option(value='no-quiero') No-quiero
+                        option(value='mazo') Ir al mazo
+                .form-group.col-sm-6
+                    label.col-sm-2.control-label(for='Carta')
+                        | Carta 
+                    select#Accion.form-control(name='value')
+                        option(value="") - Sin carta - 
+                        if (g.currentRound.currentTurn == 'player1')
+                            each card1 in g.player1.cards
+                                td
+                                &nbsp;    
+                                option(value='#{card1.show()}') #{card1.show()}
+                        else
+                            each card2 in g.player2.cards
+                                td
+                                &nbsp;    
+                                option(value='#{card2.show()}') #{card2.show()}
+                .form-group
+                    button.btn.btn-primary(type='submit') Jugar
+                    &nbsp;      
+                    a.btn.btn-default(href='/myacc', role='button') Salir
+            if (g.currentRound.currentTurn == 'player1')
+                h4.span#sbfont Turno de: #{g.player1.name} 
+            else
+                h4.span#sbfont Turno de: #{g.player2.name}                      
+            if (g.currentRound.currentTurn == 'player1')
+                //p Cartas de #{g.player1.name} :
+                each card1 in g.player1.cards
+                    td
+                    &nbsp;    
+                    img(width="128", height="165", src='/images/#{card1.show()}.png')
+            else
+                //p Cartas de #{g.player2.name} :
+                each card2 in g.player2.cards
+                    td
+                    &nbsp;    
+                    img(width="128", height="165", src='/images/#{card2.show()}.png') 
+            p

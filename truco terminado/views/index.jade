@@ -1,0 +1,22 @@
+extends layout
+block content
+	div(class="remove-float center-block text-center big-top-space")
+		if (user)
+			.index-card.effect7
+				h2 Hola #{user.username}
+				hr
+				a(href='/play')
+					button.btn.btn-primary(type="button") Jugar
+				&nbsp;
+				a(href="/logout")
+					button.btn.btn-default(type="button") Cerrar sesión
+	div(class="remove-float center-block text-center big-top-space")
+		if (!user)		
+			.index-card.effect7
+				h2 Bienvenidos al Truco
+				hr
+				a(href="/login" class="right-space")
+					button.btn.btn-primary(type="button") Iniciar sesión
+				&nbsp;
+				a(href="/register" class="left-space")
+					button.btn.btn-primary(type="button") Crear cuenta

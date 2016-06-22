@@ -1,0 +1,14 @@
+extends layout
+block content
+	div(class="remove-float center-block text-center big-top-space")
+		.myacc-card.effect7
+			if (g.score[0]>=4)
+				h2 Ganaste #{g.player1.name}!
+			else
+				h2 Perdiste #{g.player1.name}!	
+			hr
+			a(href='/newgame')
+				button.btn.btn-primary(type='submit' class="right-space left-space") Nuevo juego
+			&nbsp;
+			a(href='/myacc')
+				button.btn.btn-default(type="button") Salir
