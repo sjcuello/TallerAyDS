@@ -1,0 +1,22 @@
+extends layout
+block content
+	div(class="remove-float center-block text-center big-top-space")
+		if (user)
+			.myacc-card.effect7
+				h2 Hola #{user.username}
+				hr
+				a(href='/newgame')
+					button.btn.btn-primary(type="button") Crear juego
+				&nbsp;		
+				a(href="/logout")
+					button.btn.btn-default(type="button") Cerrar sesión
+	div(class="remove-float center-block text-center big-top-space")		
+		if (!user)
+			.myacc-card.effect7		
+				h2 No has iniciado sesión
+				hr
+				a(href='/login')
+					button.btn.btn-primary(type="button") Tengo cuenta
+				&nbsp;							
+				a(href='/register')
+					button.btn.btn-primary(type="button") No tengo cuenta
