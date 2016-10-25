@@ -58,13 +58,13 @@ function newTrucoFSM(){
 function Round(game, turn){
   this.player1 = game.player1;  
   
-  this.player1.__proto__ = Player.prototype;
+  //this.player1.__proto__ = Player.prototype;
 
   this.player2 = game.player2;
 
-  this.player2.__proto__ = Player.prototype;  
+  //this.player2.__proto__ = Player.prototype;  
 
-  this.game = game;
+  //this.game = game;
 
   this.currentTurn = turn;
  

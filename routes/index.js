@@ -125,6 +125,10 @@ router.get('/newgame', function(req,res){
                        __v : 0 },
             currentHand: req.session.player
         });
+
+
+
+    game.currentRound= game.newRound();
     game.save(function(err,game){
         if(err){
             console.log("ERROR AL GUARDAR EL JUEGO: " + err);
@@ -143,14 +147,16 @@ router.get('/play', function(req, res){
         console.log("gamecreate 1: " + gamecreate);
         console.log("Get de play: " + req.session.game_id);
         gamecreate.newRound();
-        gamecreate.currentRound.deal();                              
+        gamecreate.currentRound.deal();    
+        console.log("*************gamecreate.currentRound: " + gamecreate.currentRound);                          
         if(gamecreate.score[0] == 0 && gamecreate.score[1] == 0){
             gamecreate.newRound();
             gamecreate.currentRound.deal();
         }
         var round = gamecreate.currentRound;
         round.__proto__ = Round.prototype;
-        console.log("gamecreate 2: " + gamecreate); 
+
+        console.log("++++++++round: " +  round); 
         /*Game.update({overwrite: true,new: true, upsert: true, setDefaultsOnInsert: true}, function (err){   
             if(err){
                 console.log(err);
@@ -159,14 +165,15 @@ router.get('/play', function(req, res){
                 res.render('play', { g : gamecreate });
             }
         });*/
-        /*
+        
         gamecreate.save(function(err){
             if(err){
                 console.log(err);
             }
+            console.log("se guardoo!");
             res.render('play', { g : gamecreate });
-        });*/
-        res.render('play', { g : gamecreate });
+        });
+        //res.render('play', { g : gamecreate });
     });
 });
 
@@ -175,8 +182,8 @@ router.post('/play', function(req, res){
         console.log("Post de play: " + req.session.game_id);
         console.log("gamecurrent:" + gamecurrent);
         //gamecurrent.getRound();
-        //var round = gamecurrent.currentRound;
-        //round.__proto__ = Round.prototype;      
+        var round = gamecurrent.currentRound;
+        round.__proto__ = Round.prototype;      
         if(round.fsm.cannot(req.body.action)){
             res.redirect('notmove');  
         }
