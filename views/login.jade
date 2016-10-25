@@ -15,6 +15,9 @@ block content
 				a(href='/')
 					button.btn.btn-default(type="button") Atrás
 			hr
+			if (message)
+				h4(style='color:red;')= message
+				hr
 			.login-help
 				a(href='/register') No tengo cuenta
 				|  • 

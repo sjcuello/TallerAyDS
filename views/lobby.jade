@@ -1,0 +1,31 @@
+extends layout
+block content
+	.play-card.effect7
+		| 		
+		div(class="remove-float center-block text-center")    
+			h1 En el lobby
+			hr
+			a(href='/newgame')
+				button.btn.btn-primary(type="button") Crear juego
+			| 				
+			a(href='/myacc')
+				button.btn.btn-info(type="button") Perfil				
+			| 		
+			a(href="/logout")
+				button.btn.btn-danger(type="button") Cerrar sesión
+		br
+	.play-card.effect7
+		| 		
+		div(class="remove-float center-block text-center")
+			h2#header
+			h2#room
+	script.
+		var socket = io();
+		socket.on('broadcast',function(data){
+			var element = document.getElementById("header");
+			element.innerHTML = data.description;
+		});
+		socket.on('connectToRoom',function(data){
+			var element = document.getElementById("room");
+			element.innerHTML = data;
+		});

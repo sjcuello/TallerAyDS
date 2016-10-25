@@ -1,25 +1,31 @@
 extends layout
 block content
     body.bkimg
-    div(class="remove-float center-block text-center")    
+    form(role='form', action='/play', method='POST')        
         .play-card.effect7
-            form(role='form', action='/play', method='POST')
-                &nbsp;
-                h4.span#sbfont #{g.player1.name}: #{g.score[0]} - #{g.player2.name}: #{g.score[1]}   
-                hr(style="margin-top: 5px; margin-bottom: 5px")
-                if (g.currentRound.bandera == true)
+            div(class="remove-float center-block text-center")
+                h4.span#sbfont  #{g.player1.nickname}: #{g.score[0]} - #{g.player2.nickname}: #{g.score[1]}               
+        .play-card.effect7
+            br
+            div(class="remove-float center-block text-center")
+                //hr(style="margin-top: 5px; margin-bottom: 5px")
+                if (g.currentRound.flagTruco == true)
                     h4.span#sbfont ¿Truco cantado?: Si
-                p Cartas #{g.player1.name}
+                p Cartas #{g.player1.nickname}
                 each card1 in g.currentRound.tablep1
                     td
-                    &nbsp;    
+                    | 
                     img(width="67", height="85", src='/images/#{card1.show()}.png')
-                p Cartas #{g.player2.name}
+                p Cartas #{g.player2.nickname}
                 each card1 in g.currentRound.tablep2
                     td
-                    &nbsp;    
+                    |    
                     img(width="67", height="85", src='/images/#{card1.show()}.png')   
-                p   
+                p
+            br   
+        .play-card.effect7
+            div(class="remove-float center-block text-center")
+                br
                 .form-group.col-sm-6                   
                     label.col-sm-2.control-label(for='Accion')
                         | Acción
@@ -38,31 +44,32 @@ block content
                         if (g.currentRound.currentTurn == 'player1')
                             each card1 in g.player1.cards
                                 td
-                                &nbsp;    
+                                |    
                                 option(value='#{card1.show()}') #{card1.show()}
                         else
                             each card2 in g.player2.cards
                                 td
-                                &nbsp;    
+                                |    
                                 option(value='#{card2.show()}') #{card2.show()}
                 .form-group
                     button.btn.btn-primary(type='submit') Jugar
-                    &nbsp;      
-                    a.btn.btn-default(href='/myacc', role='button') Salir
+                    |       
+                    a.btn.btn-default(href='/lobby', role='button') Salir
             if (g.currentRound.currentTurn == 'player1')
-                h4.span#sbfont Turno de: #{g.player1.name} 
+                h4.span#sbfont Turno de: #{g.player1.nickname}
             else
-                h4.span#sbfont Turno de: #{g.player2.name}                      
+                h4.span#sbfont Turno de: #{g.player2.nickname}                      
             if (g.currentRound.currentTurn == 'player1')
                 //p Cartas de #{g.player1.name} :
                 each card1 in g.player1.cards
                     td
-                    &nbsp;    
+                    |      
                     img(width="128", height="165", src='/images/#{card1.show()}.png')
             else
                 //p Cartas de #{g.player2.name} :
                 each card2 in g.player2.cards
                     td
-                    &nbsp;    
+                    | 
                     img(width="128", height="165", src='/images/#{card2.show()}.png') 
             p
+            br

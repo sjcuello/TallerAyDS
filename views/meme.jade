@@ -3,6 +3,7 @@ block content
 	body.bkimgmeme
 	div(class="remove-float center-block text-center")
 		.login-card.effect7
+			img(src='/images/travolta.gif' style="position:absolute; bottom:0px; right:0px; width: 300px; height: auto;") 	
 			h1 Inciar sesión
 			hr
 			form(role='form', action="/login",method="post", style='max-width: 300px;')
@@ -14,6 +15,6 @@ block content
 					input.form-control(type='password', name="password", placeholder='Contraseña')
 				hr
 				button.btn.btn-primary(type='submit' class="right-space left-space") Iniciar sesión
-				&nbsp;
+				| 
 				a(href='/')
-					button.btn.btn-default(type="button") Atrás
+				button.btn.btn-default(type="button") Atrás

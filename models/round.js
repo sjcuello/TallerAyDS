@@ -6,9 +6,13 @@ var Schema = mongoose.Schema;
 var deckModel = require("./deck");
 var cardModel = require("./card");
 var playerModel = require("./player");
+var gameModel = require("./game");
+var Game = gameModel.game;
 var Deck  = deckModel.deck;
 var Card = cardModel.card;
 var Player = playerModel.player;
+var cartasp1 = [];
+var cartasp2 = [];
 var turnWin = [];                 //lista con el ganador de cada turno
 var tablep1 = [];                 //cartas jugadas j1
 var tablep2 = [];                 //cartas jugadas j2
@@ -52,7 +56,14 @@ function newTrucoFSM(){
 
 //------------------------------------------------------------------------------------------------
 function Round(game, turn){
- 
+  this.player1 = game.player1;  
+  
+  this.player1.__proto__ = Player.prototype;
+
+  this.player2 = game.player2;
+
+  this.player2.__proto__ = Player.prototype;  
+
   this.game = game;
 
   this.currentTurn = turn;
@@ -61,7 +72,7 @@ function Round(game, turn){
 
   this.status = 'running';
 
-  this.score = [0, 0];
+  this.score = [0,0];
 
   this.turnWin = [];
 
@@ -74,6 +85,11 @@ function Round(game, turn){
   this.flagNoCanto=  false;
 
   this.auxWin = false;
+
+  this.cartasp1 = [];
+
+  this.cartasp2 = [];
+
 }
 //----------------------------------------------------------------------------------
 
@@ -372,9 +388,6 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
 
 }
 //------------------------------------------------------------------------------------
-
-
-
 
 //--------------------------------------------------------------------------------------
   Round.prototype.setTable = function(value,player){
