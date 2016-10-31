@@ -1,7 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var router = express.Router();
-
+var _ = require('lodash');
 var User = require('../models/user');
 var Game = require("../models/game").game;
 var Player = require("../models/player").player;
@@ -115,101 +115,249 @@ router.get('/logout', function(req, res) {
 // ===================================================================================================================
 // ROUTER GET / POST NEW GAME , IT'S WORKING. :)))))))
 router.get('/newgame', function(req,res){  
-    //Player.findOne({ nickname: req.session.name },function(err,player) {
-    var game = new Game ({
+       var game = new Game ({
             player1: req.session.player, 
             player2: { nickname: "Gino",
                        _id: "580d27b0d382ab2559c033bd", 
                        envidoPoints : 0, 
                        cards : [ ], 
                        __v : 0 },
-            currentHand: req.session.player
+            currentHand: req.session.player.nickname,
+            currentTurn:req.session.player.nickname,
+            currentState: 'init'
         });
+    game.deal();
+    game.currentRound = game.newRound('init');
 
 
-
-    game.currentRound= game.newRound();
+    game.score[0] = 3;
+    game.score[1] = 6;
+    
     game.save(function(err,game){
         if(err){
             console.log("ERROR AL GUARDAR EL JUEGO: " + err);
         }
         req.session.game_id = game._id;
-        req.session.game = game;            
+        req.session.game = game;    
+
+        console.log("///////////////////////////////////////////////////////////////////////////");        
+        console.log("game que creo al comienzo: " + game);  
+        console.log("///////////////////////////////////////////////////////////////////////////");
+
         res.redirect('play');
     });
-    //});   
 });
 
 // ===================================================================================================================
 
 router.get('/play', function(req, res){
     Game.findOne( { _id :req.session.game_id },function(err,gamecreate){
-        console.log("gamecreate 1: " + gamecreate);
-        console.log("Get de play: " + req.session.game_id);
-        gamecreate.newRound();
-        gamecreate.currentRound.deal();    
-        console.log("*************gamecreate.currentRound: " + gamecreate.currentRound);                          
-        if(gamecreate.score[0] == 0 && gamecreate.score[1] == 0){
-            gamecreate.newRound();
-            gamecreate.currentRound.deal();
-        }
-        var round = gamecreate.currentRound;
-        round.__proto__ = Round.prototype;
 
-        console.log("++++++++round: " +  round); 
-        /*Game.update({overwrite: true,new: true, upsert: true, setDefaultsOnInsert: true}, function (err){   
-            if(err){
-                console.log(err);
-            }else{
-                console.log("Se ha updateado todo, en teoría.");
-                res.render('play', { g : gamecreate });
-            }
-        });*/
+        console.log("//////////////////////////////////////////////////////////");      
+        console.log("Get de play: ");    
+        console.log("Lo que traigo de la bd: "+gamecreate);
+        console.log("//////////////////////////////////////////////////////////");  
+
+
+
+    if(gamecreate.currentRound.auxWin == true){
         
-        gamecreate.save(function(err){
-            if(err){
-                console.log(err);
-            }
-            console.log("se guardoo!");
-            res.render('play', { g : gamecreate });
-        });
-        //res.render('play', { g : gamecreate });
-    });
+
+        gamecreate.deal();
+
+        gamecreate.score = gamecreate.currentRound.score;
+
+        gamecreate.currentState ='init';
+
+
+        var round2 = gamecreate.newRound('init');
+
+        round2.__proto__ = Round.prototype;
+
+        round2.player1 = gamecreate.player1.nickname;  
+
+        round2.player2 = gamecreate.player2.nickname;
+        
+        round2.currentTurn = gamecreate.currentTurn;
+
+        round2.currentHand = gamecreate.currentHand;
+
+        round2.score = gamecreate.score;
+
+        round2.turnWin = [];
+
+        round2.tablep1 =  [];
+
+        round2.tablep2 =  [];
+
+        round2.flagTruco =  false;
+
+        round2.flagNoCanto=   false;
+
+        round2.auxWin =  false;
+
+        round2.cartasp1 =  gamecreate.player1.cards;
+    
+        round2.cartasp2 =  gamecreate.player2.cards;
+      
+
+        gamecreate.currentRound = round2;
+
+        gamecreate.save(function (err,resultado){ 
+              if(err){
+                console.log("ERROR AL GUARDAR DESPUES DE PLAY: " + err);
+              }else{
+                console.log("777777777777777777777777777777777777777777777777777777777 ");
+                console.log(" nueba ronda guardada: " + resultado);
+                console.log("777777777777777777777777777777777777777777777777777777777 ");
+
+              res.render('play', { g : resultado });
+           
+            }         
+          })
+
+   }else{  
+
+
+        console.log("777777777777777777777777777777777777777777777777777777777 ");
+        console.log(" entre al else de get de play, aux win == false ");
+        res.render('play', { g : gamecreate });
+    }
+    }); 
 });
 
 router.post('/play', function(req, res){
-    Game.findOne( { _id :req.session.game_id }, function(err,gamecurrent){                                                                                                        
-        console.log("Post de play: " + req.session.game_id);
-        console.log("gamecurrent:" + gamecurrent);
-        //gamecurrent.getRound();
-        var round = gamecurrent.currentRound;
-        round.__proto__ = Round.prototype;      
+    Game.findOne( { _id :req.session.game_id }, function(err,gamecurrent){    
+
+        console.log("//////////////////////////////////////////////////////////");                                                                                                    
+        console.log("Post de play: " );
+        console.log("Lo que traigo de la bd: "+gamecurrent);
+        console.log("//////////////////////////////////////////////////////////");  
+
+
+        var round = gamecurrent.newRound(gamecurrent.currentState);
+
+        round.__proto__ = Round.prototype;
+
+        round.player1 = gamecurrent.player1.nickname;  
+
+        round.player2 = gamecurrent.player2.nickname;
+        
+        round.currentTurn = gamecurrent.currentTurn;////////////////////////////////
+
+        round.currentHand = gamecurrent.currentHand;
+
+        round.score = gamecurrent.currentRound.score;
+
+        round.turnWin = gamecurrent.currentRound.turnWin;
+
+        round.tablep1 =  gamecurrent.currentRound.tablep1;
+
+        round.tablep2 =  gamecurrent.currentRound.tablep2;
+
+        round.flagTruco =  gamecurrent.currentRound.flagTruco;
+
+        round.flagNoCanto=   gamecurrent.currentRound.flagNoCanto;
+
+        round.auxWin =  gamecurrent.currentRound.auxWin;
+
+        round.cartasp1 =  gamecurrent.currentRound.cartasp1;
+    
+        round.cartasp2 =  gamecurrent.currentRound.cartasp2;
+      
+
+        gamecurrent.currentRound = round;
+
+
+        console.log("//////////////////////////////////////////////////////////");  
+        console.log("Lo que tiene el gamecurrent antes del play: "+gamecurrent);
+        console.log("//////////////////////////////////////////////////////////");  
+        
+        //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!LAS CARTAS DE gamecurrent p1: "+JSON.stringify(gamecurrent.currentRound.cartasp1));
+        //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!LAS CARTAS DE gamecurrent p2: "+JSON.stringify(gamecurrent.currentRound.cartasp2));
+       
         if(round.fsm.cannot(req.body.action)){
             res.redirect('notmove');  
         }
         if(req.body.value == '' && req.body.action == 'playcard'){
             res.redirect('notmove'); 
         }
-        gamecurrent.play(round.currentTurn, req.body.action, req.body.value);
+
+
+       // gamecurrent.score[0]+=1;
+       // gamecurrent.score[1]+=1;
+
+        gamecurrent.currentRound=gamecurrent.play(gamecurrent.currentTurn,req.body.action, req.body.value);
+
+
+
+
+        console.log("777777777777777777777777777777777777777777777777777777777 ");
+        console.log("current had antes " + gamecurrent.currentHand);
+        gamecurrent.switchPlayer();
+        console.log("current had despues" + gamecurrent.currentHand);
+        console.log("777777777777777777777777777777777777777777777777777777777 ");
+
+         //_.pullAt(gamecurrent.currentRound.cartasp2, 2);
+        
+        gamecurrent.currentTurn = gamecurrent.currentHand;
+         gamecurrent.score = gamecurrent.currentRound.score;
+         gamecurrent.currentState = gamecurrent.currentRound.fsm.current;
+/*
+        gamecurrent.score[0] = gamecurrent.score[0] + gamecurrent.currentRound.score[0];
+        gamecurrent.score[1] = gamecurrent.score[1] + gamecurrent.currentRound.score[1];
+
+        gamecurrent.setPoints(); 
+*/
+        console.log("777777777777777777777777777777777777777777777777777777777 ");
+        console.log("lo que paso despues de play, antes de guardar" + gamecurrent);
+        console.log("777777777777777777777777777777777777777777777777777777777 ");
+
+
+
         if(gamecurrent.score[0] >= 30){
             res.redirect('win');
-        }
-        else if(gamecurrent.score[1] >= 30){
+        }else {
+          if(gamecurrent.score[1] >= 30){
             res.redirect('win'); 
+          }
         }
-        else{
-            if(round.auxWin == true){
-                gamecurrent.update({ _id :req.session.game_id }, 
-                            { $set : {score : gamecurrent.score, currentRound: gamecurrent.currentRound} },
-                            /*{upsert:true,safe:true,multi: true},*/
-                            function (err,resultado){   
-                    return res.redirect('/play');
-                });
-            }
-        }
-        res.render('play', { g : gamecurrent });            
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ gamecurrent.save(function (err,resultado){ 
+              if(err){
+                console.log("ERROR AL GUARDAR DESPUES DE PLAY: " + err);
+              }else{
+                console.log("777777777777777777777777777777777777777777777777777777777 ");
+                console.log("lo que tiene el resultado de la ronda: " + resultado);
+                console.log("777777777777777777777777777777777777777777777777777777777 ");
+                var rAux=resultado.currentRound;
+                rAux.__proto__=Round.prototype;
+                //console.log("lo que tiene rAux: "+rAux);
+
+
+
+                
+                if(rAux.auxWin == true){
+                  //console.log("lo guardado "+ resultado);
+
+
+                  console.log("explota antes del redirect");
+                  return res.redirect('/play');
+              }else{
+                console.log("explota antes del render");
+                res.render('play', { g : resultado });  
+              }   
+            }         
+          });
+
+
+
+
     });
 });
+
+
 
 router.get('/meme', function(req, res) {
     res.render('meme');

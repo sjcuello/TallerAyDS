@@ -1,10 +1,10 @@
 extends layout
 block content
     body.bkimg
-    form(role='form', action='/play', method='POST')        
+    form(role='form', action='/play', method='POST')
         .play-card.effect7
             div(class="remove-float center-block text-center")
-                h4.span#sbfont  #{g.player1.nickname}: #{g.score[0]} - #{g.player2.nickname}: #{g.score[1]}               
+                h4.span#sbfont  #{g.player1.nickname}: #{g.currentRound.score[0]} - #{g.player2.nickname}: #{g.currentRound.score[1]}
         .play-card.effect7
             br
             div(class="remove-float center-block text-center")
@@ -14,23 +14,23 @@ block content
                 p Cartas #{g.player1.nickname}
                 each card1 in g.currentRound.tablep1
                     td
-                    | 
-                    img(width="67", height="85", src='/images/#{card1.show()}.png')
+                    //|
+                    img(width="67", height="85", src='/images/#{card1.number + "-" + card1.suit}.png')
                 p Cartas #{g.player2.nickname}
-                each card1 in g.currentRound.tablep2
+                each card2 in g.currentRound.tablep2
                     td
-                    |    
-                    img(width="67", height="85", src='/images/#{card1.show()}.png')   
+                    //|
+                    img(width="67", height="85", src='/images/#{card2.number + "-" + card2.suit}.png')
                 p
-            br   
+            br
         .play-card.effect7
             div(class="remove-float center-block text-center")
                 br
-                .form-group.col-sm-6                   
+                .form-group.col-sm-6
                     label.col-sm-2.control-label(for='Accion')
                         | Acción
                     select#Accion.form-control(name='action')
-                        option(value='playcard') Jugar carta                       
+                        option(value='playcard') Jugar carta
                         option(value='truco') Truco
                         option(value='envido') Envido
                         option(value='quiero') Quiero
@@ -38,38 +38,38 @@ block content
                         option(value='mazo') Ir al mazo
                 .form-group.col-sm-6
                     label.col-sm-2.control-label(for='Carta')
-                        | Carta 
+                        | Carta
                     select#Accion.form-control(name='value')
                         option(value="") - Sin carta - 
-                        if (g.currentRound.currentTurn == 'player1')
-                            each card1 in g.player1.cards
+                        if (g.currentRound.currentTurn  == g.currentRound.player1)
+                            each card1 in g.currentRound.cartasp1
                                 td
-                                |    
-                                option(value='#{card1.show()}') #{card1.show()}
+                                //|
+                                option(value='#{card1.number + "-" + card1.suit }') #{card1.number + "-" + card1.suit}
                         else
-                            each card2 in g.player2.cards
+                            each card2 in g.currentRound.cartasp2
                                 td
-                                |    
-                                option(value='#{card2.show()}') #{card2.show()}
+                                //|
+                                option(value='#{card2.number + "-" + card2.suit }') #{card2.number + "-" + card2.suit}
                 .form-group
                     button.btn.btn-primary(type='submit') Jugar
-                    |       
+                    //|
                     a.btn.btn-default(href='/lobby', role='button') Salir
-            if (g.currentRound.currentTurn == 'player1')
+            if (g.currentRound.currentTurn == g.currentRound.player1)
                 h4.span#sbfont Turno de: #{g.player1.nickname}
             else
-                h4.span#sbfont Turno de: #{g.player2.nickname}                      
-            if (g.currentRound.currentTurn == 'player1')
+                h4.span#sbfont Turno de: #{g.player2.nickname}
+            if (g.currentRound.currentTurn == g.currentRound.player1)
                 //p Cartas de #{g.player1.name} :
-                each card1 in g.player1.cards
+                each card1 in g.currentRound.cartasp1
                     td
-                    |      
-                    img(width="128", height="165", src='/images/#{card1.show()}.png')
+                    //|
+                    img(width="128", height="165", src='/images/#{card1.number + "-" + card1.suit}.png')
             else
                 //p Cartas de #{g.player2.name} :
-                each card2 in g.player2.cards
+                each card2 in g.currentRound.cartasp2
                     td
-                    | 
-                    img(width="128", height="165", src='/images/#{card2.show()}.png') 
+                    //|
+                    img(width="128", height="165", src='/images/#{card2.number + "-" + card2.suit}.png')
             p
             br

@@ -23,56 +23,65 @@ var auxWin = false;               //ganador del truco
 
 
 //----------------------------------------------------------------------------------------
-function newTrucoFSM(){
-  var fsm = StateMachine.create({
-  initial:'init',
-  events: [
+Round.prototype.newTrucoFSM=function(estadoInic){
+  var initialState = estadoInic || 'init'; 
 
-    { name: 'playcard',  from: 'init',                           to: 'primer-carta' },
-  
-    { name: 'envido',    from: ['init', 'primer-carta'],         to: 'envido' },
+    var fsm = StateMachine.create({
+    initial: initialState,
+    events: [
 
-    { name: 'mazo',      from: ['init', 'primer-carta','envido',
-                                'played-card','playcard',
-                                'quiero','no-quiero'],           to: 'mazo' },
-  
-    { name: 'truco',     from: ['init', 'played-card',
-                                'playcard','primer-carta',
-                                'quiero','no-quiero'],           to: 'truco'  },
+      { name: 'playcard',  from: 'init',                           to: 'primer-carta' },
+    
+      { name: 'envido',    from: ['init', 'primer-carta'],         to: 'envido' },
 
-    { name: 'playcard',  from: ['quiero', 'no-quiero',
-                                'primer-carta', 'played-card',
-                                'envido', 'truco'],             to: 'played-card' },   
+      { name: 'mazo',      from: ['init', 'primer-carta','envido',
+                                  'played-card','playcard',
+                                  'quiero','no-quiero'],           to: 'mazo' },
+    
+      { name: 'truco',     from: ['init', 'played-card',
+                                  'playcard','primer-carta',
+                                  'quiero','no-quiero'],           to: 'truco'  },
 
-    { name: 'quiero',    from: ['envido', 'truco'],             to: 'quiero'  },
+      { name: 'playcard',  from: ['quiero', 'no-quiero',
+                                  'primer-carta', 'played-card',
+                                  'envido', 'truco'],             to: 'played-card' },   
 
-    { name: 'no-quiero', from: ['envido', 'truco'],             to: 'no-quiero' },
-  ]});
+      { name: 'quiero',    from: ['envido', 'truco'],             to: 'quiero'  },
 
-  return fsm;
-}
+      { name: 'no-quiero', from: ['envido', 'truco'],             to: 'no-quiero' },
+    ]});
+
+    return fsm;
+  }
+
 //------------------------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------------------------
 function Round(game, turn){
-  this.player1 = game.player1;  
+  this.player1 = game.player1.nickname;  
   
   //this.player1.__proto__ = Player.prototype;
 
-  this.player2 = game.player2;
+  this.player2 = game.player2.nickname;
 
   //this.player2.__proto__ = Player.prototype;  
 
   //this.game = game;
 
-  this.currentTurn = turn;
+  this.currentHand = game.currentHand;
+
+  this.currentTurn = game.currentTurn;
+
+  //this.currentTurn = turn;
  
-  this.fsm = newTrucoFSM();
+  this.fsm = this.newTrucoFSM(game.currentState);
 
   this.status = 'running';
 
-  this.score = [0,0];
+ // this.score = [0,0];
+
+  this.score = game.score;
 
   this.turnWin = [];
 
@@ -86,26 +95,43 @@ function Round(game, turn){
 
   this.auxWin = false;
 
-  this.cartasp1 = [];
+  this.cartasp1 = game.player1.cards;
 
-  this.cartasp2 = [];
+  this.cartasp2 = game.player2.cards;
+
+  this.pointsEnvidoP1 = game.player1.envidoPoints;
+
+  this.pointsEnvidoP2 = game.player2.envidoPoints;
+
 
 }
 //----------------------------------------------------------------------------------
-
-
-
+/*
+Round.prototype.imprime= function(){
+  console.log("-----------TRAE EL METODO-----------------------");
+};
+*/
 //-----------------------------------------------------------------------------------
+/*
 Round.prototype.deal = function(){
   var deck = new Deck().mix();
-  this.game.player1.setCards(_.pullAt(deck, 0, 2, 4));
-  this.game.player2.setCards(_.pullAt(deck, 1, 3, 5));
-};
+  this.cartasp1 = (_.pullAt(deck, 0, 2, 4));
+  this.cartasp2 = (_.pullAt(deck, 1, 3, 5));
+};*/
 //----------------------------------------------------------------------------------
 
+
+
 //------------------------------------------------------------------------------------
-function switchPlayer(player) {
-  return "player1" === player ? "player2" : "player1";
+Round.prototype.switchPlayer=function (player) {
+  /*console.log("el player de switchPlayer  de ronda 1");
+  console.log(this.player1);
+  console.log("el player de switchPlayer  de ronda 2");
+  console.log(this.player2);
+  console.log("el player de switchPlayer ");
+  console.log(player);*/
+
+  return this.player1 === player ? this.player2 : this.player1;
 };
 //-----------------------------------------------------------------------------------
 
@@ -149,7 +175,9 @@ Round.prototype.distHamming = function(arr1,arr2){
       case 0:
         if(this.tablep1[0]!=undefined && this.tablep2[0]!=undefined){
           var card1 = this.tablep1[0];
+          card1.__proto__ = Card.prototype;
           var card2 = this.tablep2[0];
+          card2.__proto__ = Card.prototype;
           var conf = card1.confront(card2);
           this.selectWin(conf);                  
         }
@@ -157,7 +185,9 @@ Round.prototype.distHamming = function(arr1,arr2){
       case 1:
         if(this.tablep1[1]!=undefined && this.tablep2[1]!=undefined){
           var card1 = this.tablep1[1];
+          card1.__proto__ = Card.prototype;
           var card2 = this.tablep2[1];
+          card2.__proto__ = Card.prototype;
           var conf = card1.confront(card2);
           this.selectWin(conf);                  
         }
@@ -165,7 +195,9 @@ Round.prototype.distHamming = function(arr1,arr2){
       case 2:
         if(this.tablep1[2]!=undefined && this.tablep2[2]!=undefined){
           var card1 = this.tablep1[2];
+          card1.__proto__ = Card.prototype;
           var card2 = this.tablep2[2];
+          card2.__proto__ = Card.prototype;
           var conf = card1.confront(card2);
           this.selectWin(conf);                  
         }
@@ -199,24 +231,24 @@ Round.prototype.changeTurn = function(){
 
   if((_.size(this.tablep1)!=_.size(this.tablep2))||(this.fsm.current == 'truco')){
 
-   return this.currentTurn = switchPlayer(this.currentTurn);
+   return this.currentTurn = this.switchPlayer(this.currentTurn);
   }
 
   if(_.size(this.turnWin)!=0){//el que gana sigue jugando
 
     switch(_.last(this.turnWin)){
       case 0:
-        return this.currentTurn = 'player1';
+        return this.currentTurn = this.player1;
         break;
       case 1:
-        return this.currentTurn = 'player2';
+        return this.currentTurn = this.player2;
         break;
       case -1:
-        return this.currentTurn = this.game.currentHand;
+        return this.currentTurn = this.currentHand;
         break;
     }
   }
-  return this.currentTurn = switchPlayer(this.currentTurn);
+  return this.currentTurn = this.switchPlayer(this.currentTurn);
 
 }
 //-----------------------------------------------------------------------
@@ -224,8 +256,9 @@ Round.prototype.changeTurn = function(){
 
 
 //----------------------------------------------------------------------
-Round.prototype.calculateScore = function(action,prev,value,player){
+Round.prototype.calculateScore = function(game,action,prev,value,player){
 
+  console.log("el player en calculateScore es: "+ player);
   //cuando se tira una carta
   if (((action == "played-card")||(action == "playcard"))&&(this.auxWin==false)){
                                     
@@ -260,11 +293,11 @@ Round.prototype.calculateScore = function(action,prev,value,player){
     
     if  ((_.size(this.tablep1)>0) && (_.size(this.tablep2)>0)) {
        this.auxWin=true;   
-       if (player == 'player1'){ this.score[1]+=1; }
-       if (player == 'player2'){ this.score[0]+=1; }
+       if (player == this.player1){ this.score[1]+=1; }
+       if (player == this.player2){ this.score[0]+=1; }
     }else{
-       if (player == 'player1'){ this.score[1]+=2; }
-       if (player == 'player2'){ this.score[0]+=2; }
+       if (player == this.player1){ this.score[1]+=2; }
+       if (player == this.player2){ this.score[0]+=2; }
        this.auxWin=true;   
     }
   }
@@ -287,12 +320,6 @@ Round.prototype.calculateScore = function(action,prev,value,player){
     
   }
 
-        this.game.score[0] += this.score[0];
-        this.game.score[1] += this.score[1];
-
-        this.score[0]= 0;
-        this.score[1]= 0;
-
       return this;
 }     
 //------------------------------------------------------------------------------------
@@ -302,20 +329,16 @@ Round.prototype.calculateScore = function(action,prev,value,player){
 //------------------------------------------------------------------------------------
 Round.prototype.calculateScoreEnvido = function(action){
 
-  var pointsEnvidoP1 = this.game.player1.envidoPoints;
-  var pointsEnvidoP2 = this.game.player2.envidoPoints;
-  var currentHand = this.game.currentHand;
-
   if (action == "quiero"){
-    if (pointsEnvidoP1 > pointsEnvidoP2){ this.score[0]+=2; }
-    if (pointsEnvidoP2 > pointsEnvidoP1){ this.score[1]+=2; }
-    if (pointsEnvidoP1 == pointsEnvidoP2 && currentHand == 'player1'){ this.score[0] +=2; }
-    if (pointsEnvidoP1 == pointsEnvidoP2 && currentHand == 'player2'){ this.score[1] +=2; }
+    if (this.pointsEnvidoP1 > this.pointsEnvidoP2){ this.score[0]+=2; }
+    if (this.pointsEnvidoP2 > this.pointsEnvidoP1){ this.score[1]+=2; }
+    if (this.pointsEnvidoP1 == this.pointsEnvidoP2 && this.currentHand == this.player1){ this.score[0] +=2; }
+    if (this.pointsEnvidoP1 == this.pointsEnvidoP2 && this.currentHand == this.player2){ this.score[1] +=2; }
   }
 
   if (action == "no-quiero"){
-    if (currentHand == 'player1'){ this.score[0] += 1; }
-    if (currentHand == 'player2'){ this.score[1] += 1; }
+    if (this.currentHand == this.player1){ this.score[0] += 1; }
+    if (this.currentHand == this.player2){ this.score[1] += 1; }
   }
 }
 //------------------------------------------------------------------------------------------------------
@@ -366,7 +389,7 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
     if((this.distHamming(ch,this.turnWin))==0){
 
       //en caso de triple empate le sumo 2 al jugador mano
-      if('player1' == this.game.currentHand){ 
+      if(this.player1 == this.currentHand){ 
         this.score[0]+=2; 
       }else{
         this.score[1]+=2; 
@@ -382,8 +405,8 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
   if (action == "no-quiero"){
 
        this.auxWin=true;   
-       if (player == 'player1'){ this.score[1]+=1; }
-       if (player == 'player2'){ this.score[0]+=1; }
+       if (player == this.player1){ this.score[1]+=1; }
+       if (player == this.player2){ this.score[0]+=1; }
   }
 
 }
@@ -391,31 +414,42 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
 
 //--------------------------------------------------------------------------------------
   Round.prototype.setTable = function(value,player){
+    console.log("entro al setTable");
+    console.log("++++++++++el value de setTable es: "+value);
     var encontrado = false;
-      if(player == 'player1'){
+    console.log("player es: "+ player);
+      if(player == this.player1){
+      console.log("player1 es: "+ player);
       var card = new Card (this.returnNumber(value),this.returnSuit(value));
+      //console.log("la carta creada: "+card.show() );
+      console.log("las cartasp1: "+cartasp1);
         var aux = undefined;
         var i = 0;
-        while (i < _.size(this.game.player1.cards)){
-          if(this.game.player1.cards[i].number == card.number && this.game.player1.cards[i].suit == card.suit){
+        while (i < _.size(this.cartasp1)){
+          
+          if(this.cartasp1[i].number == card.number && this.cartasp1[i].suit == card.suit){
+            
             aux = i;
             encontrado = true;
-            this.tablep1.push(card);        
+            this.tablep1.push(card);     
+            console.log("el tablep1: " + tablep1);   
           }
           i++;
         }
         console.log("posicion de la carta " + aux);
 
         if(aux!=undefined){ 
-          _.pullAt(this.game.player1.cards, [aux]);
+          _.pullAt(this.cartasp1, [aux]);
+          console.log("cartasp1: "+ this.cartasp1);
         }
       }      
-      if(player == 'player2'){
+      if(player == this.player2){
+        console.log("player2 es:" + player);
         var card = new Card (this.returnNumber(value),this.returnSuit(value));
         var aux = undefined;
         var i = 0;
-        while (i < _.size(this.game.player2.cards)){
-          if(this.game.player2.cards[i].number == card.number && this.game.player2.cards[i].suit == card.suit){
+        while (i < _.size(this.cartasp2)){
+          if(this.cartasp2[i].number == card.number && this.cartasp2[i].suit == card.suit){
             aux = i;
             encontrado=true;
             this.tablep2.push(card);            
@@ -425,9 +459,12 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
 
         console.log("posicion de la carta " + aux);
         if(aux!=undefined){
-          _.pullAt(this.game.player2.cards, [aux]);
+          _.pullAt(this.cartasp2, [aux]);
+          console.log("cartasp2: "+ cartasp2);
         }
       }
+
+
       
   }  
 //------------------------------------------------------------------------------------
@@ -456,15 +493,24 @@ Round.prototype.reset =function() {
 
 
 //------------------------------------------------------------------------------------
-Round.prototype.play = function(player,action, value){
+Round.prototype.play = function(game,player,action, value){
     // save the last state 
     var prev = this.actionPrevious(); 
+
+    console.log("el previo es " + prev );
+
+    console.log("el player en ronda es: "+player);
     // move to the next state  
     this.fsm[action]();
     // check if is needed sum score
-    this.calculateScore(action,prev,value,player);
+    this.calculateScore(game,action,prev,value,player);
    
-    return this.changeTurn();
+    this.changeTurn();
+
+
+
+
+    return this;
 };
 
 module.exports.round = Round;

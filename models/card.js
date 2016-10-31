@@ -41,6 +41,7 @@ function Card(number, suit){
 /*
  *  Print a card
  */
+ 
 Card.prototype.show = function(){
   return this.number + "-" + this.suit;
 };
