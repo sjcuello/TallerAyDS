@@ -502,20 +502,13 @@ Round.prototype.reset =function() {
 Round.prototype.play = function(game,player,action, value){
     // save the last state 
     var prev = this.actionPrevious(); 
-
-    console.log("el previo es " + prev );
-
-    console.log("el player en ronda es: "+player);
     // move to the next state  
     this.fsm[action]();
     // check if is needed sum score
     this.calculateScore(game,action,prev,value,player);
    
     this.changeTurn();
-
-
-
-
+    
     return this;
 };
 

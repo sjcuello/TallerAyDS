@@ -7,7 +7,8 @@
 var app = require('../server');
 var debug = require('debug')('truco:server');
 var http = require('http');
-var connections = 0;
+var realtime = require("../realtime");
+
 /**
  * Get port from environment and store in Express.
  */
@@ -27,23 +28,8 @@ var server = http.createServer(app).listen(app.get('port'), function(){
  */
 var io = require('socket.io').listen(server);
 
+realtime(server);
 //https://github.com/socketio/socket.io/blob/master/examples/chat/index.js#L35-L36
-var roomno = 1;
-io.on('connection', function(socket){ 
-	connections++;
-	console.log('connected', connections);
-	io.sockets.emit('broadcast',{description: connections + ' jugadores conectados!'}); 	
-  	
-  	if(io.nsps['/'].adapter.rooms["room-"+roomno])
-  	socket.join("room-" + roomno);
-  	io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
-	
-	socket.on('disconnect', function () {
-		connections--;
-		console.log('connected', connections);
-		io.sockets.emit('broadcast',{description: connections + ' jugadores conectados!'});
-	});
-});
 
 //server.listen(port);
 server.on('error', onError);

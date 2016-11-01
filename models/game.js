@@ -23,6 +23,7 @@ var GameSchema = new Schema({
 	currentState: Object,
 	currentRound: Object,
 	score:        { type : Array , default : [0,0] },
+	transitions: Object
 
 });
 

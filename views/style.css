@@ -8,6 +8,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+
+.fdizquierda {float: left; width: 50%;}
+.fdderecha {float: right; width: 50%;}
+
 .bkimg {
     background-image: url(/images/fondoplay.jpg);
     background-position: bottom;

@@ -43,46 +43,18 @@ app.use(passport.session());
 
 app.use('/', routes);
 
-/*
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      console.log(username);
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (user.password != password){
-      //if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-)); 
-*/
-/*
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username : req.body.username}, function(err, user) {
-      //console.log(req.body.username);
-      //console.log(req.body.password);
-      if (err) { return err; } 
-      if (!user) { 
-        return res.render("login", { message: 'Usuario incorrecto.' });
-      }
-      if (!user.validPassword(pass)) {
-        return res.render("login", { message: 'Contraseña incorrecta.' });
-      }
-      return res.redirect('/myacc');
-    });
-  }
-));
-
-*/
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser())
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+//passport.serializeUser(User.serializeUser());
+//passport.deserializeUser(User.deserializeUser());
 
 // mongoose
 //mongoose.promise = global.promise;

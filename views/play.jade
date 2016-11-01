@@ -1,75 +1,53 @@
 extends layout
 block content
-    body.bkimg
-    form(role='form', action='/play', method='POST')
-        .play-card.effect7
-            div(class="remove-float center-block text-center")
-                h4.span#sbfont  #{g.player1.nickname}: #{g.currentRound.score[0]} - #{g.player2.nickname}: #{g.currentRound.score[1]}
-        .play-card.effect7
-            br
-            div(class="remove-float center-block text-center")
-                //hr(style="margin-top: 5px; margin-bottom: 5px")
-                if (g.currentRound.flagTruco == true)
-                    h4.span#sbfont ¿Truco cantado?: Si
-                p Cartas #{g.player1.nickname}
-                each card1 in g.currentRound.tablep1
-                    td
-                    //|
-                    img(width="67", height="85", src='/images/#{card1.number + "-" + card1.suit}.png')
-                p Cartas #{g.player2.nickname}
-                each card2 in g.currentRound.tablep2
-                    td
-                    //|
-                    img(width="67", height="85", src='/images/#{card2.number + "-" + card2.suit}.png')
-                p
-            br
-        .play-card.effect7
-            div(class="remove-float center-block text-center")
-                br
-                .form-group.col-sm-6
-                    label.col-sm-2.control-label(for='Accion')
-                        | Acción
-                    select#Accion.form-control(name='action')
-                        option(value='playcard') Jugar carta
-                        option(value='truco') Truco
-                        option(value='envido') Envido
-                        option(value='quiero') Quiero
-                        option(value='no-quiero') No-quiero
-                        option(value='mazo') Ir al mazo
-                .form-group.col-sm-6
-                    label.col-sm-2.control-label(for='Carta')
-                        | Carta
-                    select#Accion.form-control(name='value')
-                        option(value="") - Sin carta - 
-                        if (g.currentRound.currentTurn  == g.currentRound.player1)
-                            each card1 in g.currentRound.cartasp1
-                                td
-                                //|
-                                option(value='#{card1.number + "-" + card1.suit }') #{card1.number + "-" + card1.suit}
-                        else
-                            each card2 in g.currentRound.cartasp2
-                                td
-                                //|
-                                option(value='#{card2.number + "-" + card2.suit }') #{card2.number + "-" + card2.suit}
-                .form-group
-                    button.btn.btn-primary(type='submit') Jugar
-                    //|
-                    a.btn.btn-default(href='/lobby', role='button') Salir
-            if (g.currentRound.currentTurn == g.currentRound.player1)
-                h4.span#sbfont Turno de: #{g.player1.nickname}
-            else
-                h4.span#sbfont Turno de: #{g.player2.nickname}
-            if (g.currentRound.currentTurn == g.currentRound.player1)
-                //p Cartas de #{g.player1.name} :
-                each card1 in g.currentRound.cartasp1
-                    td
-                    //|
-                    img(width="128", height="165", src='/images/#{card1.number + "-" + card1.suit}.png')
-            else
-                //p Cartas de #{g.player2.name} :
-                each card2 in g.currentRound.cartasp2
-                    td
-                    //|
-                    img(width="128", height="165", src='/images/#{card2.number + "-" + card2.suit}.png')
-            p
-            br
+	body.bkimg
+	form(role='form', action='/play', method='POST')
+		.play-card.effect7
+			div(class="remove-float center-block text-center")
+				h4.span#sbfont  #{g.player1.nickname}: #{g.currentRound.score[0]} - #{g.player2.nickname}: #{g.currentRound.score[1]}
+		.play-card.effect7
+			br
+			div(class="remove-float center-block text-center")
+				hr(style="margin-top: 5px; margin-bottom: 5px")
+				if (g.currentRound.flagTruco == true)
+					h4.span#sbfont ¿Truco cantado?: Si
+				p Cartas #{g.player1.nickname}
+				each card1 in g.currentRound.tablep1
+					td
+					| 
+					img(width="67", height="85", src='/images/#{card1.number + "-" + card1.suit}.png')
+				p Cartas #{g.player2.nickname}
+				each card2 in g.currentRound.tablep2
+					td
+					| 
+					img(width="67", height="85", src='/images/#{card2.number + "-" + card2.suit}.png')
+				p
+			br
+		.play-card.effect7
+			div(class="remove-float center-block text-center")
+				.form-group.col-sm-6
+					label.col-sm-2.control-label(for='Accion')
+						| Acción
+					select#Accion.form-control(name='action')
+						each accion in g.transitions
+							option(value='#{accion}') #{accion}
+				.form-group.col-sm-6
+					button.btn.btn-primary(type='submit') Jugar
+					| 
+					a.btn.btn-default(href='/lobby', role='button') Salir	
+				if (g.currentRound.currentTurn == g.currentRound.player1)
+					h4.span#sbfont Turno de: #{g.player1.nickname}
+				else
+					h4.span#sbfont Turno de: #{g.player2.nickname}
+				if (g.currentRound.currentTurn == g.currentRound.player1)
+					each card1 in g.currentRound.cartasp1
+						td
+						| 
+						input(type='image', width="128", height="165", name='value', value='#{card1.number + "-" + card1.suit }', src='/images/#{card1.number + "-" + card1.suit}.png')
+				else
+					each card2 in g.currentRound.cartasp2
+						td
+						| 
+						input(type='image', width="128", height="165", name='value', value='#{card2.number + "-" + card2.suit }', src='/images/#{card2.number + "-" + card2.suit}.png')
+				p
+				br
