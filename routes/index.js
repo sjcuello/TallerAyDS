@@ -130,8 +130,8 @@ router.get('/newgame', function(req,res){
     game.currentRound = game.newRound('init');
 
 
-    game.score[0] = 3;
-    game.score[1] = 6;
+    //game.score[0] = 3;
+    //game.score[1] = 6;
     
     game.save(function(err,game){
         if(err){
@@ -199,6 +199,35 @@ router.get('/play', function(req, res){
         round2.cartasp1 =  gamecreate.player1.cards;
     
         round2.cartasp2 =  gamecreate.player2.cards;
+
+        console.log("//////////////////////////////////////////////////////////");   
+        var  i = 0;
+        var aux = false;
+        while (i< 3) {
+
+              var  j = 0;
+               while (j< 3) {
+
+
+                  if (round2.cartasp1[i].weight  == round2.cartasp2[j].weight) {
+
+                            aux = true;
+                                    console.log("///////////////// hay pardas nena!!!!!!!!!!!!");   
+                                 console.log("cartas de p1: "+ JSON.stringify(round2.cartasp1[i]));
+                                 console.log("..............................................................................");
+                                 console.log("cartas de p2: "+ JSON.stringify(round2.cartasp2[j]));
+
+                  }
+
+                  j++;
+            }
+
+            i++
+
+        }
+
+
+        console.log("//////////////////////////////////////////////////////////"); 
       
 
         gamecreate.currentRound = round2;
@@ -264,6 +293,8 @@ router.post('/play', function(req, res){
         round.cartasp1 =  gamecurrent.currentRound.cartasp1;
     
         round.cartasp2 =  gamecurrent.currentRound.cartasp2;
+
+        round.pardas =  gamecurrent.currentRound.pardas;
       
 
         gamecurrent.currentRound = round;
@@ -275,8 +306,8 @@ router.post('/play', function(req, res){
         
         //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!LAS CARTAS DE gamecurrent p1: "+JSON.stringify(gamecurrent.currentRound.cartasp1));
         //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!LAS CARTAS DE gamecurrent p2: "+JSON.stringify(gamecurrent.currentRound.cartasp2));
-       
-        if(round.fsm.cannot(req.body.action)){
+        
+        if(gamecurrent.currentRound.fsm.cannot(req.body.action)){
             res.redirect('notmove');  
         }
         if(req.body.value == '' && req.body.action == 'playcard'){
@@ -294,7 +325,50 @@ router.post('/play', function(req, res){
 
         console.log("777777777777777777777777777777777777777777777777777777777 ");
         console.log("current had antes " + gamecurrent.currentHand);
-        gamecurrent.switchPlayer();
+
+        var pardas = false;
+        /*
+        if ((gamecurrent.currentRound.turnWin[0]==-1) && (_.size(gamecurrent.currentRound.tablep1)==1)&& (_.size(gamecurrent.currentRound.tablep2)==1)) {
+           pardas = true;
+        }*/
+
+
+
+        if ((gamecurrent.currentRound.turnWin[0]==-1) && (gamecurrent.currentRound.pardas == false)){
+           pardas = true;
+           gamecurrent.currentRound.pardas = true;
+           console.log("777777777777777777777777777   seme paro :) ");
+
+        }
+
+
+        /*
+
+        if ((gamecurrent.currentRound.turnWin[0]==-1) &&(gamecurrent.currentRound.turnWin[1]==-1) && (_.size(gamecurrent.currentRound.turnWin)==2)){
+           pardas = true;
+
+        }
+        */
+
+
+
+
+/*
+        var i=0;
+        while(i<(_.size(gamecurrent.currentRound.turnWin))){
+            if ((gamecurrent.currentRound.turnWin[i]==-1) && (_.size(gamecurrent.currentRound.tablep1)==i)&& (_.size(gamecurrent.currentRound.tablep2)==i)) {
+                pardas = true;
+            }
+            i++;
+        }
+
+*/
+
+        if (pardas == false){
+
+            gamecurrent.switchPlayer();
+        }
+    
         console.log("current had despues" + gamecurrent.currentHand);
         console.log("777777777777777777777777777777777777777777777777777777777 ");
 

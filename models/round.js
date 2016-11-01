@@ -103,6 +103,7 @@ function Round(game, turn){
 
   this.pointsEnvidoP2 = game.player2.envidoPoints;
 
+  this.pardas = false; 
 
 }
 //----------------------------------------------------------------------------------
@@ -414,10 +415,15 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
 
 //--------------------------------------------------------------------------------------
   Round.prototype.setTable = function(value,player){
+
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
     console.log("entro al setTable");
-    console.log("++++++++++el value de setTable es: "+value);
-    var encontrado = false;
+    console.log("el value de setTable es: "+value);
     console.log("player es: "+ player);
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
+
+
+      var encontrado = false;
       if(player == this.player1){
       console.log("player1 es: "+ player);
       var card = new Card (this.returnNumber(value),this.returnSuit(value));

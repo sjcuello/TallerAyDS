@@ -90,21 +90,10 @@ Game.prototype.deal = function(){
 
 }
 
-
-
-Game.prototype.setPoints = function(){
-  
+Game.prototype.setPoints = function(){ 
   this.score[0] += this.currentRound.score[0];
   this.score[1] += this.currentRound.score[1];
 }
-
-
-Game.prototype.getRound = function(){	
-	//var round = this.currentRound;
-	var round = this.rounds.pop();
-	return round;
-}
-
 
 Game.prototype.switchPlayer=function(player) {
 
