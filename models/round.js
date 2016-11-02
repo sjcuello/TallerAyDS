@@ -6,19 +6,30 @@ var Schema = mongoose.Schema;
 var deckModel = require("./deck");
 var cardModel = require("./card");
 var playerModel = require("./player");
-var gameModel = require("./game");
-var Game = gameModel.game;
 var Deck  = deckModel.deck;
 var Card = cardModel.card;
 var Player = playerModel.player;
-var cartasp1 = [];
-var cartasp2 = [];
 var turnWin = [];                 //lista con el ganador de cada turno
 var tablep1 = [];                 //cartas jugadas j1
 var tablep2 = [];                 //cartas jugadas j2
 var flagTruco = false;            //flagTruco canto truco
+var flagRetruco= false;
+var flagValeCuatro=false;
 var flagNoCanto = false;          //flagTruco para partidos sin cantar truco
 var auxWin = false;               //ganador del truco  
+
+var posiblesE=[//coleccion con todas las posibilidades de estados de envido
+        {'p': "envido"},{'p': "envido-envido"},{'p': "real-envido"},{'p': "envido-real"},
+        {'p': "envido-envido-real"},{'p': "falta-envido"},{'p': "envido-falta"},{'p': "envido-envido-falta"},
+        {'p': "envido-envido-real-falta"},{'p': "real-envido-falta"},{'p': "envido-real-falta"}
+    ];
+
+var posiblesE1=[ "envido", "envido-envido","real-envido", "envido-real",
+                         "envido-envido-real", "falta-envido", "envido-falta","envido-envido-falta",
+                         "envido-envido-real-falta", "real-envido-falta","envido-real-falta"];
+
+var posiblesT=[{'t':"truco"},{'t':"retruco"},{'t':"valecuatro"}];
+var posiblesT1=["truco","retruco","valecuatro"];
 //----------------------------------------------------------------------------------------
 
 
@@ -30,56 +41,67 @@ Round.prototype.newTrucoFSM=function(estadoInic){
     initial: initialState,
     events: [
 
-      { name: 'playcard',  from: 'init',                           to: 'primer-carta' },
-    
-      { name: 'envido',    from: ['init', 'primer-carta'],         to: 'envido' },
+    { name: 'playcard',  from: 'init',                           to: 'primer-carta' },
+  
+    { name: 'envido',    from: ['init', 'primer-carta'],         to: 'envido' },
 
-      { name: 'mazo',      from: ['init', 'primer-carta','envido',
-                                  'played-card','playcard',
-                                  'quiero','no-quiero'],           to: 'mazo' },
-    
-      { name: 'truco',     from: ['init', 'played-card',
-                                  'playcard','primer-carta',
-                                  'quiero','no-quiero'],           to: 'truco'  },
+    { name: 'envido-envido',    from: ['envido'],         to: 'envido-envido' },
+    { name: 'envido-real',    from: ['envido'],         to: 'envido-real' },
+    { name: 'envido-envido-real',    from: ['envido-envido'],         to: 'envido-envido-real' },
+    { name: 'real-envido',    from: [ 'init','primer-carta'],         to: 'real-envido' },
 
-      { name: 'playcard',  from: ['quiero', 'no-quiero',
-                                  'primer-carta', 'played-card',
-                                  'envido', 'truco'],             to: 'played-card' },   
+    { name: 'falta-envido',    from: ['init','primer-carta','envido','envido-envido', 
+                                                        'real-envido','envido-envido-real','envido-real'],   to: 'falta-envido' },
 
-      { name: 'quiero',    from: ['envido', 'truco'],             to: 'quiero'  },
+    { name: 'envido-falta',    from: ['envido'],         to: 'envido-falta' },
+    { name: 'envido-envido-falta',    from: ['envido-envido'],         to: 'envido-envido-falta' },
+    { name: 'envido-real-falta',    from: ['envido-real'],         to: 'envido-real-falta' },
+    { name: 'envido-envido-real-falta',    from: ['envido-envido-real'],         to: 'envido-envido-real-falta' },
+    { name: 'real-envido-falta',    from: [ 'real-envido'],         to: 'real-envido-falta' },
 
-      { name: 'no-quiero', from: ['envido', 'truco'],             to: 'no-quiero' },
-    ]});
+    { name: 'mazo',      from: ['init', 'primer-carta',
+                                              'played-card','playcard','envido','envido-envido','envido-envido-real','envido-real',
+                                              'real-envido','real-envido','falta-envido','envido-falta','envido-envido-falta',
+                                              'envido-real-falta','envido-envido-real-falta','real-envido-falta', 'truco','retruco','valecuatro'],         to: 'mazo' },
+  
+    { name: 'truco',     from: ['init', 'played-card',
+                                'playcard','primer-carta',
+                                'quiero','no-quiero'],           to: 'truco'  },
 
-    return fsm;
-  }
+    { name: 'retruco',     from: ['truco', 'quiero','playcard','played-card'],                      to: 'retruco'  },
 
+    { name: 'valecuatro',     from: ['retruco', 'quiero','playcard','played-card'],                   to: 'valecuatro'  },
+
+
+    { name: 'playcard',  from: ['quiero', 'no-quiero',
+                                'primer-carta', 'played-card',
+                                'envido', 'truco', 'retruco','valecuatro'],             to: 'played-card' },   
+
+    { name: 'quiero',    from: ['envido','envido-envido','envido-envido-real','envido-real',
+                                              'real-envido','real-envido','falta-envido','envido-falta','envido-envido-falta',
+                                              'envido-real-falta','envido-envido-real-falta','real-envido-falta', 'truco','retruco','valecuatro'],             to: 'quiero'  },
+
+    { name: 'no-quiero', from: ['envido','envido-envido','envido-envido-real','envido-real',
+                                                'real-envido','real-envido','falta-envido','envido-falta','envido-envido-falta',
+                                                'envido-real-falta','envido-envido-real-falta','real-envido-falta', 'truco','retruco','valecuatro'],             to: 'no-quiero' },
+  ]});
+
+  return fsm;
+}
 //------------------------------------------------------------------------------------------------
 
-
-//------------------------------------------------------------------------------------------------
 function Round(game, turn){
   this.player1 = game.player1.nickname;  
-  
-  //this.player1.__proto__ = Player.prototype;
 
   this.player2 = game.player2.nickname;
-
-  //this.player2.__proto__ = Player.prototype;  
-
-  //this.game = game;
 
   this.currentHand = game.currentHand;
 
   this.currentTurn = game.currentTurn;
-
-  //this.currentTurn = turn;
  
   this.fsm = this.newTrucoFSM(game.currentState);
 
   this.status = 'running';
-
- // this.score = [0,0];
 
   this.score = game.score;
 
@@ -107,30 +129,12 @@ function Round(game, turn){
 
 }
 //----------------------------------------------------------------------------------
-/*
-Round.prototype.imprime= function(){
-  console.log("-----------TRAE EL METODO-----------------------");
-};
-*/
-//-----------------------------------------------------------------------------------
-/*
-Round.prototype.deal = function(){
-  var deck = new Deck().mix();
-  this.cartasp1 = (_.pullAt(deck, 0, 2, 4));
-  this.cartasp2 = (_.pullAt(deck, 1, 3, 5));
-};*/
-//----------------------------------------------------------------------------------
+
 
 
 
 //------------------------------------------------------------------------------------
 Round.prototype.switchPlayer=function (player) {
-  /*console.log("el player de switchPlayer  de ronda 1");
-  console.log(this.player1);
-  console.log("el player de switchPlayer  de ronda 2");
-  console.log(this.player2);
-  console.log("el player de switchPlayer ");
-  console.log(player);*/
 
   return this.player1 === player ? this.player2 : this.player1;
 };
@@ -229,13 +233,13 @@ Round.prototype.selectWin= function(conf){
 
 //------------------------------------------------------------------------------------
 Round.prototype.changeTurn = function(){
-
-  if((_.size(this.tablep1)!=_.size(this.tablep2))||(this.fsm.current == 'truco')){
-
+//if((_.size(this.tablep1)!=_.size(this.tablep2))||((_.find(posiblesT,'t',(this.fsm.current)))!=undefined)){
+if((_.size(this.tablep1)!=_.size(this.tablep2))||(this.fsm.current == 'truco') || (this.fsm.current == 'retruco')|| (this.fsm.current == 'valecuatro')){
+//(_.find(posiblesE,'p',prev))!=undefined)
    return this.currentTurn = this.switchPlayer(this.currentTurn);
   }
 
-  if(_.size(this.turnWin)!=0){//el que gana sigue jugando
+if(_.size(this.turnWin)!=0){//el que gana sigue jugando
 
     switch(_.last(this.turnWin)){
       case 0:
@@ -259,7 +263,6 @@ Round.prototype.changeTurn = function(){
 //----------------------------------------------------------------------
 Round.prototype.calculateScore = function(game,action,prev,value,player){
 
-  console.log("el player en calculateScore es: "+ player);
   //cuando se tira una carta
   if (((action == "played-card")||(action == "playcard"))&&(this.auxWin==false)){
                                     
@@ -277,37 +280,17 @@ Round.prototype.calculateScore = function(game,action,prev,value,player){
     //en el caso que no se canto nada le sumo uno al ganador
     if((this.flagTruco==false) &&  (this.flagNoCanto==false) && (_.size(this.tablep1)>1) && (_.size(this.tablep2)>1)) { 
 
-      console.log("no se canto nada");
-
+      //console.log("no se canto nada");
        var p1 = this.score[0]; 
        var p2 = this.score[1]; 
-
        this.calculateScoreTruco(action,player); 
-
      } 
 
-
   }
-
-  //cuando se canta mazo
-  if((action == "mazo") && (this.flagTruco==false) ){   
-    
-    if  ((_.size(this.tablep1)>0) && (_.size(this.tablep2)>0)) {
-       this.auxWin=true;   
-       if (player == this.player1){ this.score[1]+=1; }
-       if (player == this.player2){ this.score[0]+=1; }
-    }else{
-       if (player == this.player1){ this.score[1]+=2; }
-       if (player == this.player2){ this.score[0]+=2; }
-       this.auxWin=true;   
-    }
-  }
-
-
 
   //cuando se canta envido
-  if((action == "quiero" || action == "no-quiero") && prev == "envido"){              
-    this.calculateScoreEnvido(action);        
+  if((action == "quiero" || action == "no-quiero")&&(_.find(posiblesE,'p',prev))!=undefined) {          
+      this.calculateScoreEnvido(action,prev,player);        
   }
 
   //cuando se canta truco
@@ -316,34 +299,197 @@ Round.prototype.calculateScore = function(game,action,prev,value,player){
     if(action == "quiero")    //si se acepta se activa la flagTruco
         this.flagTruco = true; 
     if((_.size(this.tablep1) <2)||(_.size(this.tablep2) <2)) //si hay 4  o mas cartas en la mesa
-        this.calculateScoreTruco(action,player,value);
-     
-    
+        this.calculateScoreTruco(action,player,value);    
   }
 
-      return this;
+  //cuando se canta retruco
+  if((action == "quiero" || action == "no-quiero" ) && prev == "retruco"){  
+    this.flagRetruco = true; 
+    //console.log("hola she truco");
+    if((_.size(this.tablep1) <2)||(_.size(this.tablep2) <2)) //si hay 4  o mas cartas en la mesa
+        this.calculateScoreTruco(action,player,value);
+     
+  }
+
+  //cuando se canta valecuatro
+  if((action == "quiero" || action == "no-quiero") && prev == "valecuatro"){  
+
+    this.flagValeCuatro = true; 
+    if((_.size(this.tablep1) <2)||(_.size(this.tablep2) <2)) //si hay 4  o mas cartas en la mesa
+        this.calculateScoreTruco(action,player,value);
+      
+  }
+      //cuando se canta mazo
+  if(action == "mazo") {  
+   
+    //if  ((_.size(this.tablep1)>0) && (_.size(this.tablep2)>0)) {
+        console.log("this.score[0] :"+ this.score[0]);
+        console.log("this.score[1] :"+ this.score[1]);
+
+
+      //Casos para el envido
+      console.log("prev:  "+prev);
+      console.log("comparacion ENVIDO: "+(_.includes(posiblesE,prev)));
+      //if(_.find(posiblesE,'p',prev)!=undefined){
+      if(_.includes(posiblesE,prev)){  
+        console.log("entro por envido");
+        this.calculateScoreEnvido("no-quiero",prev,player);
+        console.log("this.score[0] envidos :"+ this.score[0]);
+        console.log("this.score[1] envidos :"+ this.score[1]);
+      }/*else{
+        console.log("entro por envido");
+        if (player == 'player1'){ this.score[1]+=1; }
+        if (player == 'player2'){ this.score[0]+=1; }
+      }*/
+
+      //Casos para el truco
+      console.log("comparacion TRUCO: "+(_.includes(posiblesT1,prev)));
+      //if (_.find(posiblesT,'t',prev)!=undefined){
+       if(_.includes(posiblesT1,prev)){ 
+         console.log("entro por truco");
+        switch(prev){
+          case "truco":
+                  this.flagTruco=true;
+                  break;
+          case "retruco":
+                  this.flagRetruco=true;
+                  break;
+          case "valecuatro":
+                  this.flagValeCuatro=true;
+                  break;
+        }
+          this.calculateScoreTruco("no-quiero",player);
+        }else{
+          console.log("entro por truco");
+
+          if (player == this.player1){ this.score[1]+=1; }
+          if (player == this.player2){ this.score[0]+=1; }
+        }
+  }
+
+
+  return this;
 }     
 //------------------------------------------------------------------------------------
 
 
-
 //------------------------------------------------------------------------------------
-Round.prototype.calculateScoreEnvido = function(action){
+Round.prototype.calculateScoreEnvido = function(action,prev,player){
+
+  //el siguiente valor variara de acuerdo a si el juego es a 15/18/30
+  var total=30;
 
   if (action == "quiero"){
-    if (this.pointsEnvidoP1 > this.pointsEnvidoP2){ this.score[0]+=2; }
-    if (this.pointsEnvidoP2 > this.pointsEnvidoP1){ this.score[1]+=2; }
-    if (this.pointsEnvidoP1 == this.pointsEnvidoP2 && this.currentHand == this.player1){ this.score[0] +=2; }
-    if (this.pointsEnvidoP1 == this.pointsEnvidoP2 && this.currentHand == this.player2){ this.score[1] +=2; }
+
+    switch(prev) {
+    case "envido":
+        this.assignPoints(action,2);
+        break;
+    case "real-envido":
+        this.assignPoints(action,3);
+        break;
+    case "envido-envido":
+        this.assignPoints(action,4);
+        break;
+    case "envido-real":
+       this.assignPoints(action,5);
+       break;
+    case "envido-envido-real":
+       this.assignPoints(action,7);
+       break;
+    case "falta-envido":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    case "envido-falta":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    case "envido-real-falta":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    case "envido-envido-falta":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    case "envido-envido-real-falta":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    case "real-envido-falta":
+        if(player==this.player1){this.assignPoints(action,total-(this.score[1]));}
+
+          if(player==this.player2){this.assignPoints(action,total-(this.score[0]));}
+        break;
+    }
+
   }
 
   if (action == "no-quiero"){
-    if (this.currentHand == this.player1){ this.score[0] += 1; }
-    if (this.currentHand == this.player2){ this.score[1] += 1; }
+    switch(prev) {
+    case "envido":
+       this.assignPoints(action,1,player);
+        break;
+    case "real-envido":
+        this.assignPoints(action,1,player);
+        break;
+    case "envido-envido":
+        this.assignPoints(action,2,player);
+        break;
+    case "envido-real":
+        this.assignPoints(action,2,player);
+       break;
+    case "envido-envido-real":
+        this.assignPoints(action,4,player);
+       break;
+    case "falta-envido":
+        this.assignPoints(action,1,player);
+        break;
+    case "envido-falta":
+        this.assignPoints(action,2,player);
+        break;
+    case "envido-real-falta":
+        this.assignPoints(action,5,player);
+        break;
+    case "envido-envido-falta":
+        this.assignPoints(action,4,player);
+        break;
+    case "envido-envido-real-falta":
+        this.assignPoints(action,7,player);
+        break;
+    case "real-envido-falta":
+        this.assignPoints(action,3,player);
+        break;
+  }
   }
 }
 //------------------------------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------------------------------
+Round.prototype.assignPoints =function(action,num,player){
+  var pointsEnvidoP1 = this.player1.envidoPoints;
+  var pointsEnvidoP2 = this.player2.envidoPoints;
+  var currentHand = this.currentHand;
+  if(action=="quiero"){
+    if (pointsEnvidoP1 > pointsEnvidoP2){ this.score[0]+=num;  }
+    if (pointsEnvidoP2 > pointsEnvidoP1){ this.score[1]+=num;  }
+    if (pointsEnvidoP1 == pointsEnvidoP2 && currentHand == this.player1){this.score[0] +=num;}
+    if (pointsEnvidoP1 == pointsEnvidoP2 && currentHand == this.player2){this.score[1] +=num;}
+      
+  }
+    
+  if(action=="no-quiero"){
+    if (player == this.player1){ this.score[1] += num; }
+    if (player == this.player2){ this.score[0] += num; }
+  }
+}
+//------------------------------------------------------------------------------------------------------
 
 
 //-------------------------------------------------------------------------------------------------------
@@ -351,21 +497,26 @@ Round.prototype.checkWinner =function(arr, num){
   
   var i=0; 
   while(i<_.size(arr) && this.auxWin==false){
-   var elem=arr[i];
-   if (( this.distHamming(elem,this.turnWin))==0){
-     this.auxWin=true;
-
-      if (this.flagTruco == true){
-        this.score[num]+=2;
+    var elem=arr[i];
+    if (( this.distHamming(elem,this.turnWin))==0){
+      this.auxWin=true;
+      if (this.flagValeCuatro == true){//pongo el vale4, anda champagne cristal (Y) una pinturita
+         this.score[num]+=4;
       }else{
-        this.score[num]+=1;
-        this.flagNoCanto =true;
+        if (this.flagRetruco == true){//lo modifique por esta unica bandera "anda compila y todo" jaja
+          this.score[num]+=3;
+        }else{
+          if (this.flagTruco == true){
+            this.score[num]+=2;
+          }else{
+            this.score[num]+=1;
+            this.flagNoCanto =true;
+          }
+        }
       }
-      
-      console.log("************ gano "+ num + "************"); 
-     }  
-   i++;
-   }
+    }  
+    i++;
+  }
 }
 //-------------------------------------------------------------------------------------------------------
 
@@ -373,7 +524,7 @@ Round.prototype.checkWinner =function(arr, num){
 
 //-------------------------------------------------------------------------------------------------------
 Round.prototype.calculateScoreTruco = function (action,player,value){ 
-  
+
   if((action == "quiero"||action == "playcard")&&(this.auxWin==false)){
 
     //  0 cooresponde jugador 1  
@@ -388,7 +539,7 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
     var ch= [-1,-1,-1];
 
     if((this.distHamming(ch,this.turnWin))==0){
-
+this.calculateScoreTruco(action,player,value);
       //en caso de triple empate le sumo 2 al jugador mano
       if(this.player1 == this.currentHand){ 
         this.score[0]+=2; 
@@ -408,27 +559,30 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
        this.auxWin=true;   
        if (player == this.player1){ this.score[1]+=1; }
        if (player == this.player2){ this.score[0]+=1; }
+
+       if (this.flagRetruco == true){
+         if (player == this.player1){ this.score[1]+=1; }
+         if (player == this.player2){ this.score[0]+=1; }
+       }
+       if (this.flagValeCuatro == true){
+         if (player == this.player1){ this.score[1]+=2; }
+         if (player == this.player2){ this.score[0]+=2; }
+       }
   }
 
 }
 //------------------------------------------------------------------------------------
 
+
+
+
 //--------------------------------------------------------------------------------------
   Round.prototype.setTable = function(value,player){
-
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
-    console.log("entro al setTable");
-    console.log("el value de setTable es: "+value);
-    console.log("player es: "+ player);
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
 
 
       var encontrado = false;
       if(player == this.player1){
-      console.log("player1 es: "+ player);
       var card = new Card (this.returnNumber(value),this.returnSuit(value));
-      //console.log("la carta creada: "+card.show() );
-      console.log("las cartasp1: "+cartasp1);
         var aux = undefined;
         var i = 0;
         while (i < _.size(this.cartasp1)){
@@ -473,27 +627,6 @@ Round.prototype.calculateScoreTruco = function (action,player,value){
 
       
   }  
-//------------------------------------------------------------------------------------
-
-
-
-//------------------------------------------------------------------------------------
-Round.prototype.reset =function() {
-
-  this.auxWin=false; 
-  this.flagTruco=false;
-  this.score[0]=0;
-  this.score[1]=0;
-  while(_.size(this.turnWin)!=0){
-    this.turnWin.shift();
-  }
-  while(_.size(this.tablep1)!=0){
-    this.tablep1.shift();
-  }
-  while(_.size(this.tablep2)!=0){
-    this.tablep2.shift();
-  }
-}
 //------------------------------------------------------------------------------------
 
 

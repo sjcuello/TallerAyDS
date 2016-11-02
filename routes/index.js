@@ -216,6 +216,7 @@ router.post('/play', function(req, res){
         }else{           
             gamecurrent.currentRound = gamecurrent.play(gamecurrent.currentTurn,req.body.action,req.body.value);
             gamecurrent.transitions = gamecurrent.currentRound.fsm.transitions();
+            console.log("El transitions corriente es: "+gamecurrent.transitions);
             var pardas = false;
             if ((gamecurrent.currentRound.turnWin[0]==-1) && (gamecurrent.currentRound.pardas == false)){
                 pardas = true;
