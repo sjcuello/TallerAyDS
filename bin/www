@@ -26,7 +26,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 /**
  * Listen on provided port, on all network interfaces.
  */
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server);
 
 realtime(server);
 //https://github.com/socketio/socket.io/blob/master/examples/chat/index.js#L35-L36

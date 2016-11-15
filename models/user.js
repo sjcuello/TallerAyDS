@@ -15,13 +15,10 @@ var UserSchema = new Schema({
 	username: { type: String, 
 		required: true, 
 		unique: true },
-	password: String
-	/*password: { type:String, 
-			minlength:[3,"Password demasiado corta."],
-			validate: password_validation }
-	*/
+	password: String,
+	playing: Boolean,
+	connected: Boolean
 });
-
 
 var password_validation = {
 	validator: function(p){

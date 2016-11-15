@@ -1,5 +1,3 @@
-
-
 var _ = require('lodash');
 var playerModel = require("./player");
 var roundModel = require("./round");
@@ -15,7 +13,6 @@ var Round  = roundModel.round;
 
 
 var GameSchema = new Schema({
-
 	player1:      Object,
 	player2:      Object,
 	currentHand:  String,
@@ -23,8 +20,9 @@ var GameSchema = new Schema({
 	currentState: Object,
 	currentRound: Object,
 	score:        { type : Array , default : [0,0] },
-	transitions: Object
-
+	transitions: Object,
+	usuario: Object,
+	invitado: Object
 });
 
 var Game = mongoose.model('Game', GameSchema);
@@ -34,15 +32,22 @@ var Game = mongoose.model('Game', GameSchema);
  */
 
 Game.prototype.play = function(player, action, value){	
-	
+	/*
 	if(value == '' && action == 'playcard')
-		throw new Error("[ERROR] INVALID PLAY...");
+		throw new Error("[ERROR] INVALID PLAY...");*/
 //
-//console.log("el player en game es: "+player);
-//console.log("el action en game es: "+action);
-//console.log("el value en game es: "+value);
+/*
+console.log("=======en el modelo===========");
+console.log("el player en game es: "+player);
+console.log("el action en game es: "+action);
+console.log("el value en game es: "+value);
+console.log("el ct en game es: "+this.currentRound.currentTurn);
+console.log("el auxwin en game es: "+this.currentRound.auxWin);
+//console.log("el this.currentRound en game es: "+JSON.stringify(this.currentRound));
+console.log("==========================");*/
 
-//
+//	
+	
 	if(this.currentRound.currentTurn !== player  || (this.currentRound.currentTurn == player && this.currentRound.auxWin==true))   
 		throw new Error("[ERROR] INVALID TURN...");
 	
@@ -51,7 +56,6 @@ Game.prototype.play = function(player, action, value){
 
 	return this.currentRound.play(this,player,action, value);
 };
-
 
 Game.prototype.newRound = function(state){
 	var round = new Round(this, this.currentHand);
@@ -96,12 +100,12 @@ Game.prototype.setPoints = function(){
   this.score[1] += this.currentRound.score[1];
 }
 
-Game.prototype.switchPlayer=function(player) {
+Game.prototype.switchPlayer=function() {
 
-	  if(this.currentRound.player1==this.currentHand){
-          this.currentHand = this.currentRound.player2;
+	  if(this.currentRound.player1==this.currentTurn){
+          this.currentTurn = this.currentRound.player2;
         }else{
-          this.currentHand = this.currentRound.player1;
+          this.currentTurn = this.currentRound.player1;
         }
 };
 

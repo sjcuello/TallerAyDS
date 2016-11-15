@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-Test github pivotal
-=======
-Testeo
->>>>>>> cb454beea8a34e869280115e54c5b8ff149e1328
