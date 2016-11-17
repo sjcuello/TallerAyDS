@@ -242,7 +242,6 @@ Round.prototype.calculateScore = function(game,action,prev,value,player){
 	}
 	//cuando se canta envido
 	if((action == "quiero" || action == "no-quiero")&&(_.find(posiblesE,'p',prev))!=undefined) {          
-			console.log("player con el que entra en calculateScore: "+player);
 			this.calculateScoreEnvido(action,prev,player);        
 	}
 	//cuando se canta truco
@@ -272,7 +271,6 @@ Round.prototype.calculateScore = function(game,action,prev,value,player){
 
 //Metodo que calcula los puntos correspondientes a cada jugador despues de cantarse.
 Round.prototype.calculateScoreEnvido = function(action,prev,player){
-	console.log("player con el que entra en el calculateScoreEnvido: "+player);
 	//el siguiente valor variara de acuerdo a si el juego es a 9/15/18/30
 	var total=9;
 	if (action == "quiero"){
@@ -507,7 +505,6 @@ Round.prototype.play = function(game,player,action, value){
 		// move to the next state  
 		this.fsm[action]();
 		// check if is needed sum score
-		console.log("player con el que entra en round: "+player);
 		this.calculateScore(game,action,prev,value,player);
 	 
 		this.changeTurn();
