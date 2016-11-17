@@ -321,24 +321,7 @@ $(document).ready(function(){
 			socket.emit("statsUser", me.socket, name, false);		
 		}	
 	});
-/*
-	socket.on("graphs", function(ganadas, perdidas){
-		var pieData = [
-		   {
-		      value: 15,
-		      label: 'Ganadas',
-		      color: '#2EFE2E'
-		   },
-		   {
-		      value: 30,
-		      label: 'Perdidas',
-		      color: '#FE2E2E'
-		   }
-		];
-		var context = document.getElementById(stats).getContext('2d');
-		var skillsChart = new Chart(context).Pie(pieData);
-	});
-*/
+
 //-----------------------------------------------------------------------------------------
 // Socket encargado de enviar las cartas a la vista.
 	socket.on('sendCards', function(imCards, imTable, otherTable ){;
@@ -574,35 +557,4 @@ $(document).ready(function(){
 			});
 		}, 3000);
 	} 
-
-
-/*
-	var pieData = [
-	   {
-	     	value: 0,
-	      	label: 'Ganadas',
-	      	color: '#2EFE2E',  
-	   },
-	   {
-	    	value: 0,
-	    	label: 'Perdidas',
-	    	color: '#FE2E2E'
-	   }
-	];
-	var context = document.getElementById('stats').getContext('2d');
-	var statsgraph = new Chart(context).Pie(pieData);
-	stats = statsgraph;
-	//socket.emit("statsUser", me.socket, name, false);
-
-	socket.on("graphs", function(w,l){
-		console.log("Entré al graphs");
-		console.log("El valor de winner es : " + w);
-		console.log("El valor de loser es : " + l );
-		console.log("El valor del primer campo del arreglo: " + statsgraph.pieData[0].value);
-		console.log("El valor del segundo campo del arreglo: " + statsgraph.pieData[1].value);
-		statsgraph.pieData[0].value = w; // Would update the first dataset's value of 'March' to be 50
-		statsgraph.update(); // Calling update now animates the position of March from 90 to 50.
-		statsgraph.pieData[1].value = l; // Would update the first dataset's value of 'March' to be 50
-		statsgraph.update(); // Calling update now animates the position of March from 90 to 50.		
-	});*/
 });
