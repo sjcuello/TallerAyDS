@@ -307,7 +307,7 @@ $(document).ready(function(){
 			winner.show("fast");
 			win.html("Has ganado " + name);
 			party.show("fast").css("display", "block");
-			//socket.emit("statsUser", me.socket, name, true);
+			socket.emit("statsUser", me.socket, name, true);
 		}	
 	});
 
@@ -318,7 +318,7 @@ $(document).ready(function(){
 			loser.show("fast");
 			lose.html("Has perdido " + name);	
 			travolta.show("fast").css("display", "block");
-			//socket.emit("statsUser", me.socket, name, false);		
+			socket.emit("statsUser", me.socket, name, false);		
 		}	
 	});
 /*
@@ -574,4 +574,35 @@ $(document).ready(function(){
 			});
 		}, 3000);
 	} 
+
+
+/*
+	var pieData = [
+	   {
+	     	value: 0,
+	      	label: 'Ganadas',
+	      	color: '#2EFE2E',  
+	   },
+	   {
+	    	value: 0,
+	    	label: 'Perdidas',
+	    	color: '#FE2E2E'
+	   }
+	];
+	var context = document.getElementById('stats').getContext('2d');
+	var statsgraph = new Chart(context).Pie(pieData);
+	stats = statsgraph;
+	//socket.emit("statsUser", me.socket, name, false);
+
+	socket.on("graphs", function(w,l){
+		console.log("Entré al graphs");
+		console.log("El valor de winner es : " + w);
+		console.log("El valor de loser es : " + l );
+		console.log("El valor del primer campo del arreglo: " + statsgraph.pieData[0].value);
+		console.log("El valor del segundo campo del arreglo: " + statsgraph.pieData[1].value);
+		statsgraph.pieData[0].value = w; // Would update the first dataset's value of 'March' to be 50
+		statsgraph.update(); // Calling update now animates the position of March from 90 to 50.
+		statsgraph.pieData[1].value = l; // Would update the first dataset's value of 'March' to be 50
+		statsgraph.update(); // Calling update now animates the position of March from 90 to 50.		
+	});*/
 });
