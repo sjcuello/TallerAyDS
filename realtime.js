@@ -23,7 +23,7 @@ module.exports = function(server){
 		cookieParser: require('cookie-parser'), //optional your cookie-parser middleware function. Defaults to require('cookie-parser')
 		key:          'express.sid',       //make sure is the same as in your session settings in app.js
 		secret:       'keyboard cat',      //make sure is the same as in your session settings in app.js
-		store:      new MongoStore ({ mongooseConnection: mongoose.connection }),     
+		store:      new MongoStore ({ mongooseConnection: mongoose.connection}),     
 		success:      onAuthorizeSuccess,  // *optional* callback on success
 		fail:         onAuthorizeFail,     // *optional* callback on fail/error
 	}));
@@ -65,13 +65,13 @@ module.exports = function(server){
 				socket.emit('notify', 'Jugador en otro juego.');
 			}
 		});
-		
+		/*
 		socket.on('statsUser', function(id, name, bool){
-			console.log(name);
+			//console.log(name);
 			User.findOne( {username: name}, function(err,user){
 				console.log("ENTRÉ AL findOne:" +  user);
 				if(err){ console.log(err); }else{
-					console.log("ENTRÉ AL else:");
+					//console.log("ENTRÉ AL else:");
 					if(bool){
 						user.gw+=1;
 					}else{
@@ -83,7 +83,7 @@ module.exports = function(server){
 				}
 			});
 		});
-
+		*/
 		//Si el oponente acepta la invitacion, se crea un nuevo juego.
 		socket.on('accept_invite', function (player_id, game_id) {
 			//player_id: id de socket correspondiente al jugador que realiza la invitacion.
@@ -437,12 +437,12 @@ module.exports = function(server){
 							io.to(game.invitado.socket).emit("game_crash", game.usuario.username);
 							io.to(game.invitado.socket).emit("winner", game.invitado.username);//Co
 							User.findOne( {username: game.usuario.username }, function(err,user){
-								console.log("ENTRÉ AL findOne:" +  user);
+								//console.log("ENTRÉ AL findOne:" +  user);
 								if(err){ console.log(err); }else{
-									console.log("ENTRÉ AL else:");
+									//console.log("ENTRÉ AL else:");
 									user.connected = false;
 									user.save(function(err,res){
-										console.log(JSON.stringify(res));
+										//console.log(JSON.stringify(res));
 									});
 								}
 							});
@@ -450,12 +450,12 @@ module.exports = function(server){
 							io.to(game.usuario.socket).emit("game_crash", game.invitado.username);
 							io.to(game.usuario.socket).emit("winner", game.usuario.username);
 							User.findOne( {username: game.invitado.username }, function(err,user){
-								console.log("ENTRÉ AL findOne:" +  user);
+								//console.log("ENTRÉ AL findOne:" +  user);
 								if(err){ console.log(err); }else{
-									console.log("ENTRÉ AL else:");
+									//console.log("ENTRÉ AL else:");
 									user.connected = false;
 									user.save(function(err,res){
-										console.log(JSON.stringify(res));
+										//console.log(JSON.stringify(res));
 									});
 								}
 							});
